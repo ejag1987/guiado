@@ -1,0 +1,69 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %} Login Alumno {% endblock %}
+
+{% block content %}
+    <div class="container-flex d-flex py-4">
+        <div class="container align-self-center">
+            <div class="row">
+                <div class="box-container align-self-center mx-auto formulario">
+                    <header class="text-center">
+                        <img src="{% static 'core/images/branding/logo.png' %}" class="img-fluid header-logo my-3" alt="eMat">
+                        <h1 class="pb-2">Libro de Alumno</h1>
+                    </header>
+                    <div class="img-margin-left d-none d-md-block left-people">
+                        <img src="{% static 'core/images/personajes/home-1.svg' %}" class="float-right" width="160">
+                    </div>
+                    <div class="img-margin-rigth d-none d-md-block right-people">
+                        <img src="{% static 'core/images/personajes/home-2.svg' %}" width="120">
+                    </div>
+                    <div class="container-fluid">
+                        <div class="text-center mb-1 mb-sm-3 text-md-right my-2 nuevo-alumno">
+                            <a href="{% url 'nuevoAlumno' %}"><button type="button" class="btn btn-alumno-nuevo text-shadow box-shadow">¿Eres alumno nuevo? </button></a>
+                        </div>
+                        <div class="nuevo-alumno">
+                            <form class="col-md-8 offset-md-2 form-login" method="POST">
+                                {% csrf_token %}
+
+              <div class="form-row">
+                <div class="form-group col-9">
+                  <label>Rut</label>
+                  <input type="text" class="form-control input-number" id="rut" placeholder="Ejemplo: 11111111" maxlength="8" autofocus="">
+                </div>
+                <div class="form-group col-1 guion-input text-center align-self-end pb-2">
+                  <span>-</span>
+                </div>
+                <div class="form-group col-2">
+                  <br>
+                  <input type="text" class="form-control" id="validador" placeholder="1" maxlength="1">
+                </div>
+                <div id="loader"></div>
+              </div>
+              <div id="errorRut" class="error"></div>
+              <div id= "input-password"> </div>
+              <div id="errorPass" class="error"></div>
+              <div id="captcha" class="oculto">
+                <div id="img-captcha" class="col-4">{{ captcha }}</div>
+                <input id="texto-captcha" type="text" class="form-control input-number col-4" maxlength="4">
+              </div>
+              <div id="errorCaptcha" class="error"></div>
+              <br>
+              <button id="entrar" type="submit" class="btn btn-primary btn-lg btn-principal btn-block">Entrar</button>
+              <a href="recuperaClave">
+                <button type="button" class="btn btn-link btn-olvidaste btn-block text-center">¿Olvidaste tu Password?</button>
+              </a>
+            </form>
+          </div>
+        </div>
+        <footer>EMAT | BÁSICA GUIADO</footer>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extrascript %}
+    <script src="{% static 'ggalbas/js/DjangoAjax.js' %}"></script>
+    <script src="{% static 'ggalbas/js/login.js' %}"></script>
+{% endblock %}

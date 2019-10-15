@@ -1,0 +1,33 @@
+{% extends 'ggalbas/base.html' %}
+{% load static %}
+{% block title %} Portada Visor {% endblock %}
+
+
+{% block barra %}
+    <div class="col-5 col-sm-3 col-lg-2 text-center d-flex align-items-center">
+        <button id="vuelveAnteP" type="button" class="btn btn-light rounded-pill box-shadow w-100"><span><img src="{% static 'core/images/objetos/triangle-curved.svg' %}" width="18"></span> Volver</button>
+    </div>
+    <div class="col-7 col-sm-9 col-lg-10">
+        <div class="barra-estado bg-white-50 rounded p-1 my-2 text-left">
+            <span class="px-2 align-middle d-inline-block"><strong>{{prueba}}:</strong> {{descripcion}}</span>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+                <div class="col-12 col-sm-8 col-md-8 col-lg-7 offset-lg-1">
+                    <div class="d-flex align-items-center justify-content-center h-100">
+                        <img src="{% static 'core/images/personajes/Diag-PInicial-inicial-1-png8.png' %}" class="img-fluid" alt="">
+                    </div>
+                </div>
+
+                <div class="offset-3 offset-sm-0 col-6 col-sm-3 col-lg-2">
+                    <div class="d-flex align-items-center justify-content-center h-100">
+                        <a href="{% url 'visorActividades' %}" class="text-center"><img src="{% static 'core/images/objetos/flecha-lg.png' %}" class="img-fluid w-md-auto" alt=""></a>
+                    </div>
+                </div>
+{% endblock %}
+
+{% block extrascript %}
+    <script src="{% static 'ggalbas/js/diagnostico.js' %}"></script>
+{% endblock %}

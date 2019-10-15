@@ -1,0 +1,39 @@
+{% extends 'ggalbas/base.html' %}
+{% load static %}
+{% block title %} Entrada Diagnostico {% endblock %}
+
+{% block barra %}
+                <div class="col-8 col-sm-6 mb-2 mb-sm-0 text-left">
+                <div class="nombre-alumno mb-1 font-weight-bold">¡Bienvenid@! <span class="color-red">{{ nombres }}</span></div>
+                <div class="row">
+                    <div class="col-12 unidad">{{nivel}}</div>
+                    <div class="col-12 colegio">{{rbd}}</div>
+                </div>
+            </div>
+            <div class="col-4 col-sm-6 d-flex align-items-center justify-content-end flex-wrap text-right header-profile">
+                <a href="{% url 'index' %}" class="btn salir text-shadow">
+                        Salir
+                    </a>
+            </div>
+{% endblock %}
+{% block content %}
+                <div class="col-10 col-sm-7 col-md-6 col-lg-5 offset-1 offset-sm-0 offset-lg-1">
+                    <div class="bg-white-90 rounded-lg p-4 border border-white">
+                        <p>Antes de iniciar tu plan de estudio EMAT realizarás un Diagnóstico.</p>
+                        <p>Es importante que leas con atención cada instrucción antes de responder.</p>
+                        <p>En ella te preguntaremos sobre contenidos que viste años anteriores y los que verás este año, por lo que si te encuentras con materia que no dominas, sólo avanza al ejercicio siguiente.</p>
+                        <p class="text-right mb-0"><button id="continuar" class="btn-principal btn btn-primary px-4 d-inline-block">Continuar</button></p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-5 col-md-6 col-lg-5 personajes-diagnostico">
+                    <div class="d-none d-sm-flex align-items-end h-100">
+                        <img src="{% static 'core/images/personajes/basica3-5_a.png' %}" class="img-fluid d-none d-xl-block">
+                        <img src="{% static 'core/images/personajes/basica3-5_b.png' %}" class="img-fluid d-xl-none">
+                    </div>
+                </div>
+{% endblock %}
+
+{% block extrascript %}
+    <script src="{% static 'ggalbas/js/diagnostico.js' %}"></script>
+{% endblock %}

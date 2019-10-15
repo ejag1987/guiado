@@ -1,0 +1,17 @@
+
+#carpeta creada por Pycharm
+.idea/
+#Carpeta core de imagenes
+core/static/core/images
+ggalbas/static/ggalbas/images
+#bases de datos
+*.sql
+## Archivos de configuracion de Django
+core/migrations
+core/__pycache__
+ggalbas/migrations
+ggalbas/__pycache__
+proyectoEmat/settings.py
+proyectoEmat/__pycache__
+
+

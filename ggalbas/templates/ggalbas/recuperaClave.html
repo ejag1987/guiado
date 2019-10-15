@@ -1,0 +1,81 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %} Olvidó su clave {% endblock %}
+
+{% block content %}
+<div class="container-flex d-flex py-4">
+    <div class="container align-self-center">
+        <div class="row">
+            <div class="box-container align-self-center mx-auto" style="max-width: 600px;">
+                <header class="text-center">
+                    <img src="{% static 'core/images/branding/logo.png' %}" class="img-fluid header-logo my-3" alt="eMat">
+					<h1 class="pb-2">¿Olvidaste tu Password?</h1>
+				</header>
+                <div class="img-margin-left d-none d-md-block" style="left: -80px;">
+					<img src="{% static 'core/images/personajes/Nino_01_1.png' %}" class="float-right" width="130">
+				</div>
+                <div class="img-margin-rigth d-none d-md-block" style="right: -100px;">
+					<img src="{% static 'core/images/personajes/isa_verano02.png' %}" width="130">
+				</div>
+                <div class="container-fluid my-3">
+                    <div style="width:100%;display:inline-block">
+                        <div class="row">
+                            <div class="container">
+                                <div class="text-right container-fluid d-inline-block btn-back mb-1 mb-sm-3 offset-md-2 col-md-9">
+									<a href="{% url 'index' %}"><button type="button" class="btn btn-light box-shadow"><span><img src="{% static 'core/images/objetos/triangle-curved.svg' %}" width="18"></span> Volver</button></a>
+								</div>
+							</div>
+						</div>
+                        <form class="col-md-8 offset-md-2 form-alumno-nuevo" action="" method="POST">
+							{% csrf_token %}
+                            <div class="form-row">
+                                <div class="form-group col-9">
+                                    <label for="inputRut">Rut</label>
+                                    <input type="text" class="form-control input-number" id="rut" placeholder="Ejemplo: 11111111" maxlength="8" autofocus="">
+                                </div>
+                                <div class="form-group col-1 guion-input text-center align-self-end pb-2">
+                                    <span>-</span>
+                                </div>
+                                <div class="form-group col-2">
+                                    <br>
+                                    <input type="text" class="form-control" id="validador" placeholder="1" maxlength="1">
+                                </div>
+                                <div id="loader"></div>
+                            </div>
+                            <div id="errorRut" class="error"></div>
+                            <div class="form-row">
+                                <div id="pregunta-secreta" class="form-group col-12"></div>
+                            </div>
+                            <div class="form-row">
+                                <div id="label-respuesta" class="col-sm-3 px-md-0 text-sm-right"></div>
+                                <div class="col-sm-9">
+                                    <div class="row">
+                                        <div id="respuesta" class="col-12"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="errorRespuesta" class="error"></div>
+                            <br>
+                            <button id= "recuperar-password" type="button" class="btn btn-recuperar-password btn-lg btn-green btn-block mb-3">Recuperar contraseña</button>
+                            <div id="box-password-recuperada" class="form-group row card orange d-none">
+                                <div class="card-body">
+                                    <label for="forgot-password-apoderado">Tu password es:</label>
+                                    <div id ="forgot-password"></div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <footer>EMAT | BÁSICA GUIADO</footer>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extrascript %}
+    <script src="{% static 'ggalbas/js/DjangoAjax.js' %}"></script>
+    <script src="{% static 'ggalbas/js/recupera.js' %}"></script>
+{% endblock %}

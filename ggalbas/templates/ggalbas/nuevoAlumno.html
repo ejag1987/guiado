@@ -1,0 +1,217 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %} Registro Alumno {% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-form-54 col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+            <div class="box-container rounded-box shadow-sm position-relative">
+                <div class="position-absolute d-none d-md-block shape-shadow" style="left: -125px;bottom: -40px;">
+                    <img src="{% static 'core/images/personajes/caco14130818.png' %}" width="200">
+                </div>
+                <div class="position-absolute d-none d-md-block shape-shadow" style="right: -95px;bottom: -30px;">
+                    <img src="{% static 'core/images/personajes/coni_19-3_01.png' %}" width="175">
+                </div>
+                <header class="bg-gradient-yellow rounded-header libro-alumno basico text-white text-center">
+                    <div class="w-100">
+                        <img src="{% static 'core/images/branding/logo.png' %}" class="img-fluid header-logo my-3" width="200" alt="eMat">
+                    </div>
+                    <div class="w-100">
+                        <h1 class="h3 py-2 mb-0 text-shadow">Inscripción Alumno Nuevo</h1>
+                    </div>
+                </header>
+                <div class="col-md-10 offset-md-1 mb-2">
+                    <div class="text-right my-2 mb-md-3">
+                        <a href="{% url 'index' %}">
+                            <button type="button" class="btn btn-back"><span><img src="{% static 'core/images/objetos/triangle-curved.svg' %}" class="mr-1" width="18"></span> Volver</button>
+                        </a>
+                    </div>
+                    <form class="form-alumno-nuevo" method="post">
+                        {% csrf_token %}
+                        <div class="form-group row mb-2">
+                            <div class="col-sm-3 px-md-0 text-sm-right">
+                                <label for="alumnonuevo-rut" class="col-form-label">Rut:</label>
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <input type="text" class="form-control input-number" id="rut" placeholder="Ejemplo: 11111111" maxlength="8" autofocus>
+                                    </div>
+                                    <div class="col-1 px-0 text-center">
+                                            <label for="alumnonuevo-rut-cod" class="col-form-label px-md-0 text-center">-</label>
+                                    </div>
+                                    <div class="col-3">
+                                        <input type="text" class="form-control p-0 text-center" id  ="validador" placeholder="1" maxlength="1">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-2">
+                            <div class="col-sm-3 px-md-0 text-sm-right">
+                                <label for="alumnonuevo-curso" class="col-form-label">Curso:</label>
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="row">
+                                    <div class="col-12 col-sm-7">
+                                        <select id="curso" class="custom-select form-control">
+                                            <option value="" selected="">...</option>
+                                            <option value="3">3 BÁSICO</option>
+                                            <option value="4">4 BÁSICO</option>
+                                            <option value="5">5 BÁSICO</option>
+                                            <option value="6">6 BÁSICO</option>
+                                            <option value="7">7 BÁSICO</option>
+                                            <option value="8">8 BÁSICO</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2 px-md-0 text-sm-right">
+                                        <label for="alumnonuevo-curso-letra" class="col-form-label">Letra:</label>
+                                    </div>
+                                    <div class="col-12 col-sm-3">
+                                        <input type="text" class="form-control p-0 text-center" id="letra" placeholder="A">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-2">
+                            <div class="col-sm-3 px-md-0 text-sm-right">
+                                <label for="alumnonuevo-codigo-lista" class="col-form-label ">Código Lista:</label>
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <input type="text" class="form-control" id="codigo-lista">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-2">
+                            <div class="col-sm-3 px-md-0 text-sm-right">
+                                <label for="alumnonuevo-nombres" class="col-form-label">Nombres:</label>
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <input type="text" class="form-control" id="nombres">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-2">
+                            <div class="col-sm-3 px-md-0 text-sm-right">
+                                <label for="alumnonuevo-nombres" class="col-form-label">Apellidos:</label>
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <input type="text" class="form-control" id="apellidos">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-2">
+                            <div class="col-sm-3 px-md-0 text-sm-right">
+                                <label for="fecha-nacimiento" class="col-form-label">Fecha de Nacimiento:</label>
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <input type="text" class="form-control" id="fecha">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-2">
+                            <div class="col-sm-3 px-md-0 text-sm-right">
+                                <label for="pregunta" class="col-form-label">Pregunta de Seguridad:</label>
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="row">
+                                    <div class="col-12 col-sm-12">
+                                        <select id="pregunta" class="custom-select form-control">
+                                            <option value="" selected="">...</option>
+                                            <option value="1">Nombre de tu apoderado</option>
+                                            <option value="2">Nombre de tu mascota</option>
+                                            <option value="3">Color favorito</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-2">
+                            <div class="col-sm-3 px-md-0 text-sm-right">
+                                <label for="respuesta-pregunta" class="col-form-label">Respuesta:</label>
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <input type="text" class="form-control" id="respuesta">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div id="error" class="error center"></div>
+                        <br>
+                        <div class="col-sm-9 offset-sm-3">
+                            <div class="row">
+                                <button id="registro" type="button" class="btn btn-primary btn-lg btn-principal btn-block mb-3">Registrarme</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <footer class="bg-basica rounded-footer text-white text-shadow text-center py-1 small font-weight-bold">EMAT | BÁSICA</footer>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Modal Registro -->
+    <div id="modalOk" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+        <!-- Contenido del modal -->
+            <div class="modal-content position-relative">
+<!--<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button></div>-->
+                <div class="modal-body text-center px-5 py-4">
+                    <div class="d-none d-sm-flex position-absolute" style="top: -50px;right: -50px;"><img src="{% static 'core/images/objetos/check.png' %}" alt="check"></div>
+                    <div class="textModal">
+                        <div>Tu password es</div>
+                        <div id="textoOkModal"></div>
+                        <div>presiona Aceptar y estarás listo</div>
+                        <div>para entrar al programa usando</div>
+                        <div>tu rut y password</div>
+                        <div class="azul">¡Anótala en un lugar seguro!</div>
+                    </div>
+                    <div class="d-inline-block">
+                        <button id="aceptar" type="button" class="btn btn-primary btn-lg btn-principal btn-block mb-3 cerrar" data-dismiss="modal">Aceptar</button>
+                    </div>
+                </div>
+               <!-- <div class="modal-footer"></div>-->
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal Error -->
+    <div id="modalError" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+        <!-- Contenido del modal -->
+            <div class="modal-content position-relative">
+<!--<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button></div>-->
+                <div class="modal-body text-center px-5 py-4">
+                    <div class="d-none d-sm-flex position-absolute" style="top: -50px;right: -50px; width: 17%"><img src="{% static 'core/images/objetos/cancel.png' %}" alt="cancelar"></div>
+                    <div id="textoErrorModal" class="textModal"></div>
+                    <div class="d-inline-block">
+                        <button type="button" class="btn btn-primary btn-lg btn-principal btn-block mb-3 cerrar" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+<!--<div class="modal-footer"></div>-->
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extrascript %}
+    <script src="{% static 'ggalbas/js/DjangoAjax.js' %}"></script>
+    <script src="{% static 'ggalbas/js/nuevoAlumno.js' %}"></script>
+{% endblock %}
