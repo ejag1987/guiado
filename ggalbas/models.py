@@ -199,9 +199,10 @@ class TblAlumnoDiagnostico(models.Model):
 class TblAlumnoRespuestas(models.Model):
     id_alumno_respuestas = models.IntegerField(primary_key=True)
     rut_alumno = models.ForeignKey('TblAlumnos', models.DO_NOTHING, db_column='rut_alumno', blank=True, null=True)
-    id_pregunta = models.ForeignKey('TblPreguntas', models.DO_NOTHING, db_column='id_pregunta', blank=True, null=True)
-    respuesta = models.CharField(max_length=50, blank=True, null=True)
-    puntaje = models.FloatField(blank=True, null=True)
+    npregunta = models.IntegerField(blank=True, null=True)
+    prueba_guia = models.IntegerField(blank=True, null=True)
+    respuesta_alumno = models.CharField(max_length=100, blank=True, null=True)
+    aprobada = models.FloatField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -380,11 +381,11 @@ class TblPlanAutonomo(models.Model):
 
 class TblPreguntas(models.Model):
     id_pregunta = models.AutoField(primary_key=True)
-    pregunta = models.TextField()
-    respuesta = models.TextField()
+    npregunta = models.IntegerField()
     id_eje = models.ForeignKey(TblEje, models.DO_NOTHING, db_column='id_eje', blank=True, null=True)
     id_habilidad = models.ForeignKey(TblHabilidades, models.DO_NOTHING, db_column='id_habilidad', blank=True, null=True)
     id_tipo_pregunta = models.IntegerField(blank=True, null=True)
+    siglas = models.CharField(max_length=5, blank=True, null=True)
 
     class Meta:
         managed = False
