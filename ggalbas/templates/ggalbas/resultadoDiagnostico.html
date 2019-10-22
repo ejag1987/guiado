@@ -1,0 +1,88 @@
+{% extends 'ggalbas/base.html' %}
+{% load static %}
+{% block title %} Resultado Diagnostico {% endblock %}
+
+{% block barra %}
+    <div class="col-5 col-sm-3 col-lg-2 text-center d-flex align-items-center">
+        <button id="vuelveAnteP" type="button" class="btn btn-light rounded-pill box-shadow w-100"><span><img src="{% static 'core/images/objetos/triangle-curved.svg' %}" width="18"></span> Volver</button>
+    </div>
+    <div class="col-7 col-sm-9 col-lg-10">
+        <div class="barra-estado bg-white-50 rounded p-1 my-2 text-left">
+            <span class="px-2 align-middle d-inline-block"><strong>{{prueba}}:</strong> {{descripcion}}</span>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+        <div class="col-12 col-md-8 offset-md-2 box-container rounded-box-xl shadow-sm position-relative p-1 mb-5">
+                    <div class="container pt-4 py-md-5 rounded-box-xl" style="background: #fff48f;">
+                        <form class="col-md-10 offset-md-1">
+                            <div class="form-group row">
+                                <div class="col-12">
+                                    <label for="final-nombrealumno" class="col-form-label text-danger">Nombre Alumno(a):
+                                    </label>
+                                </div>
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <input type="text" class="form-control" id="final-nombrealumno" value="{{ nombres }}" disabled="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <label for="final-evaluacion" class="col-form-label text-danger">Evaluación:</label>
+                                </div>
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <input type="text" class="form-control" id="final-evaluacion" value="Materia" disabled="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row mb-0">
+                                        <div class="col-sm-12">
+                                            <label for="final-pre-requisito" class="col-form-label text-danger">Puntaje <span class="d-inline-block d-md-block">Pre-requisito</span></label>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <input type="text" class="form-control text-center" id="final-pre-requisito" value="{{punto_prerequisito}}" disabled="" style="font-size:1.5em">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row mb-0">
+                                        <div class="col-sm-12">
+                                            <label for="final-nivel-escolar" class=" col-form-label text-danger">Puntaje <span class="d-inline-block d-md-block">Nivel escolar</span></label>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <input type="text" class="form-control text-center" id="final-nivel-escolar" value="{{punto_nivel}}" disabled="" style="font-size:1.5em">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                        
+                        </form>
+
+                        <div class="btn-margin-down btn-arrow-right w-100">
+                            <a href="#" class="d-flex">
+                                <div class="flecha border border-white mx-auto my-1 mr-md-1 mb-md-1"></div>
+                            </a>
+                        </div>
+                    </div>
+                </div> 
+
+{% endblock %}
