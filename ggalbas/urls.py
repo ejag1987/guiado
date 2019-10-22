@@ -15,4 +15,6 @@ urlpatterns = [
     path('antePortada', views.antePortada, name='antePortada'),
     path('portadaVisor', views.portadaVisor, name='portadaVisor'),
     path('visorActividades', views.visorActividades, name='visorActividades'),
+    path('guardaRespuesta', views.guardaRespuesta, name='guardaRespuesta'),
 ]
+

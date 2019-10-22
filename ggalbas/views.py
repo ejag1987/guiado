@@ -2,12 +2,13 @@ import json
 import random
 import string
 import datetime
+import base64
 from datetime import date
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from ggalbas.models import TblAlumnos, TblListas, TblPreguntausuarios, TblSubproducto, TblRegistroipAlumno, TblNiveles, TblInstituciones
+from ggalbas.models import TblAlumnos, TblListas, TblPreguntausuarios, TblSubproducto, TblRegistroipAlumno, TblNiveles, TblInstituciones, TblActividades, TblTipoActividad, TblAlumnoActividades, TblAlumnoRespuestas
 from core.models import Preguntas2Basico, Pruebas
 
 
@@ -200,6 +201,7 @@ def ingresoSoloRut(request):
            prueba = 'P'+ nivel +'GG'+'01'+year
            request.session['prueba'] = prueba
         else:
+            ## Se debe consultar en tbl_actividades para saber en que actividad se encuentra
             respuesta['diagnostico'] = 'No'
     else:
         respuesta['status'] = 'error'
@@ -229,7 +231,63 @@ def portadaVisor(request):
 def visorActividades(request):
     pruebaGuia= request.session['prueba_guia']
     prueba = request.session['prueba']
+    actividad = TblActividades.objects.filter(prueba_guia=pruebaGuia)
+    rutAlumno= request.session['rut']
+
+    if actividad:
+        descripcion= actividad[0].descripcion_actividades
+    else:
+        datosPruebas = Pruebas.objects.using('e_test').filter(codprueba=prueba, idprueba=pruebaGuia)
+        if datosPruebas:
+            actividades = TblActividades(nombre_actividad=prueba, descripcion_actividades=datosPruebas[0].descprueba,
+                                         id_tipo_actividad=TblTipoActividad.objects.get(id_tipo_actividad=1),
+                                         npreguntas=datosPruebas[0].npreguntas, prueba_guia=pruebaGuia)
+            try:
+                actividades.save()
+            except:
+                print('no se guardo')
+            descripcion= 'sin'
+        else:
+            descripcion= 'no hay actividad'
+
     preguntas = Preguntas2Basico.objects.using('e_test').filter(idprueba=pruebaGuia)
+    respuestas= TblAlumnoRespuestas.objects.filter(rut_alumno=rutAlumno, prueba_guia=pruebaGuia)
+
+    if respuestas:
+        npregunta=  int(respuestas[-1].npregunta)+1
+        img = base64.b64encode(preguntas[npregunta].imagen).decode()
+        posiciones = str(preguntas[npregunta].posiciones_botones)
+        pos_boton = posiciones.replace('!', "")
+        lista_pos = pos_boton.split(',')
+        posicion_boton = [lista_pos[i:i + 4] for i in range(0, len(lista_pos), 4)]
+        npreg = preguntas[npregunta].npregunta
+        tipoEjercicio = preguntas[npregunta].tipo_ejercicio
+    else:
+        img= base64.b64encode(preguntas[0].imagen).decode()
+        posiciones = str(preguntas[0].posiciones_botones)
+        pos_boton= posiciones.replace('!',"")
+        lista_pos= pos_boton.split(',')
+        posicion_boton = [lista_pos[i:i + 4] for i in range(0, len(lista_pos), 4)]
+        npreg= preguntas[0].npregunta
+        tipoEjercicio = preguntas[0].tipo_ejercicio
+
+    data = {
+        'title': 'imagen-ejercicio',
+        'img': img,
+        'prueba': prueba,
+        'descripcion': descripcion,
+        'botones': posicion_boton,
+        'nejercicio': npreg,
+        'tipoE': tipoEjercicio,
+    }
+
+    ##return HttpResponse(cantidades)
+    return render(request, 'ggalbas/visorActividades.html', data)
+
+def guardaRespuesta(request):
+    respuesta1 = request.POST['fill1']
 
 
-    return render(request, 'ggalbas/visorActividades.html', {'prueba': prueba, 'pruebaGuia': pruebaGuia})
+    responde = json.dumps(respuesta1)
+
+    return HttpResponse (respuesta1)

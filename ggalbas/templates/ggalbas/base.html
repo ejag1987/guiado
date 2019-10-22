@@ -7,7 +7,7 @@
     <title>{% block title %} {% endblock %} | EMAT </title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'core/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'core/css/style2.css' %}">
+    <link rel="stylesheet" href="{% static 'ggalbas/css/style.css' %}">
 
 </head>
 <body class="d-flex flex-column flex-wrap vertical-center" style="background-image: url('{% if request.path == '/ggalbas/antePortada' %} {% static 'core/images/fondos/bg-diagnostico.png' %} {% elif request.path == '/ggalbas/portadaVisor' %} {% static 'core/images/fondos/Diag-PInicial-Fondo1.png' %} {% endif %}');">

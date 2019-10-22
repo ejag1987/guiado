@@ -1,6 +1,6 @@
 {% extends 'ggalbas/base.html' %}
 {% load static %}
-{% block title %} Visor Actividad {{prueba}} {% endblock %}
+{% block title %} Actividad {{prueba}} {% endblock %}
 
 {% block barra %}
     <div class="col-5 col-sm-3 col-lg-2 text-center d-flex align-items-center">
@@ -11,4 +11,86 @@
             <span class="px-2 align-middle d-inline-block"> Estás en: <strong>{{prueba}}</strong></span>
         </div>
     </div>
+{% endblock %}
+{% block content %}
+<div class="w-100 text-center">
+    <div class="box-container rounded-box rounded-botonera-tablet position-relative m-auto d-inline-block">
+        <div class="position-absolute w-100 h-100 radio-seleccion" style="display:flex;">
+
+            {% for boton in botones %}
+
+                {% if boton.0 %}
+
+                    {% widthratio boton.0 5.014 1 as top %}
+                    {% widthratio boton.1 8.121 1 as left %}
+                    {% widthratio boton.2 7.5 1 as width %}
+                    {% widthratio boton.3 4.538 1 as height %}
+
+                    {% if tipoE == 1 %}
+
+                    <div class="item-absolute" style="top:{{top}}%; left:{{left}}%; width:{{width}}%; height: {{height}}%">
+
+                        <input id = "fill-{{forloop.counter}}" type = "text" class ="bg-white h-100 w-100"style="position: relative;color: black;font-size: 25px;border-style: none;text-align: center; background: transparent;" >
+
+                    </div>
+                    {% endif %}
+                    {% if tipoE == 2 %}
+                        <input type="radio" id="radio-{{forloop.counter}}" name="radios" value="false">
+                        <label for="radio-{{forloop.counter}}" style="width:{{width}}%;height: {{height}}%;left: {{left}}%;top: {{top}}%;"></label>
+                    {% endif %}
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+        <img src="data:{{tipo}};base64,{{ img }}" width="100%" class="img-fluid img-modulo-800">
+        <div class="page-number text-black text-shadow position-absolute d-flex justify-content-center align-items-center pr-1 pb-1 pr-md-2 pb-md-2">
+            <span class="bg-white d-flex justify-content-center align-items-center align-middle rounded-bottom font-weight-bold box-shadow">{{ nejercicio }}</span>
+        </div>
+        <div class="btn-arrow-right position-absolute">
+
+            <a href="#" class="d-flex"><div id="flecha" class="flecha">{% csrf_token %}</div>
+            </a>
+        </div>
+
+    </div>
+                    <div class="w-100 text-center">
+                    <div class="d-inline-block d-xl-none container-botonera container-botonera-border text-shadow mx-auto pt-0 mw-100">
+                        <div class="buttons d-inline-flex p-1 p-md-2 rounded-lg img-modulo-800 overflow-auto">
+                            <button type="button" class="btn flex-fill mx-md-1 text-shadow">1</button>
+                            <button type="button" class="btn flex-fill mx-md-1 text-shadow">2</button>
+                            <button type="button" class="btn flex-fill mx-md-1 text-shadow">3</button>
+                            <button type="button" class="btn flex-fill mx-md-1 text-shadow">4</button>
+                            <button type="button" class="btn flex-fill mx-md-1 text-shadow">5</button>
+                            <button type="button" class="btn flex-fill mx-md-1 text-shadow">6</button>
+                            <button type="button" class="btn flex-fill mx-md-1 text-shadow">7</button>
+                            <button type="button" class="btn flex-fill mx-md-1 text-shadow">8</button>
+                            <button type="button" class="btn flex-fill mx-md-1 text-shadow">9</button>
+                            <button type="button" class="btn flex-fill mx-md-1 text-shadow">0</button>
+                            <button type="button" class="btn borrar flex-fill mx-md-1 text-shadow">Borrar</button>
+                        </div>
+                    </div>
+                </div>
+</div>
+
+<div class="modal fade" id="ModalEjercicio" tabindex="-1" role="dialog" aria-labelledby="ModalResponderEjercicioTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content position-relative">
+                <div class="modal-body text-center px-5 py-4">
+                    <div class="d-none d-sm-flex position-absolute" style="top: -50px;right: -50px;"><img src="{% static 'core/images/objetos/laptop-atencion.png' %}" alt="Atención"></div>
+                        Debes responder el ejercicio para avanzar.
+                    <div class="d-inline-block w-100">
+                        <button type="button" class="btn mt-2 btn-modal-ok text-shadow box-shadow" data-dismiss="modal">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block extrascript %}
+<script src="{% static 'ggalbas/js/DjangoAjax.js' %}"></script>
+<script src="{% static 'ggalbas/js/diagnostico.js' %}"></script>
 {% endblock %}
