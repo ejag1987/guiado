@@ -846,7 +846,7 @@ body.template-modulo.border-green {
 
 .flecha, .sonido
 {display:inline-block; overflow:hidden; background-repeat: no-repeat;
-background-image:url(../images/objetos/flecha_volumen.png);}
+background-image:url(../../core/images/objetos/flecha_volumen.png);}
 
 .flecha {width: 80px; height: 80px; background-position: 45.8234% 1.22699%; background-size: 550.538%; }
 .flecha:hover {width: 80px; height: 80px; background-position: 0.477327% 1.22699%; background-size: 550.538%; }
