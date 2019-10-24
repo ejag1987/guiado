@@ -8,8 +8,8 @@ from datetime import date
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from ggalbas.models import TblAlumnos, TblListas, TblPreguntausuarios, TblSubproducto, TblRegistroipAlumno, TblNiveles, TblInstituciones, TblActividades, TblTipoActividad, TblAlumnoActividades, TblAlumnoRespuestas
-from core.models import Preguntas2Basico, Pruebas
+from ggalbas.models import TblAlumnos, TblListas, TblPreguntausuarios, TblSubproducto, TblRegistroipAlumno, TblNiveles, TblInstituciones, TblActividades, TblTipoActividad, TblAlumnoActividades, TblAlumnoRespuestas, TblPreguntas
+from core.models import Preguntas2Basico, Pruebas, PreguntasInstancias
 
 
 def index(request):
@@ -252,9 +252,9 @@ def visorActividades(request):
 
     preguntas = Preguntas2Basico.objects.using('e_test').filter(idprueba=pruebaGuia)
     respuestas= TblAlumnoRespuestas.objects.filter(rut_alumno=rutAlumno, prueba_guia=pruebaGuia)
-
+##revisar el if ##
     if respuestas:
-        npregunta=  int(respuestas[-1].npregunta)+1
+        npregunta=  int(respuestas.last().npregunta)
         img = base64.b64encode(preguntas[npregunta].imagen).decode()
         posiciones = str(preguntas[npregunta].posiciones_botones)
         pos_boton = posiciones.replace('!', "")
@@ -281,16 +281,56 @@ def visorActividades(request):
         'tipoE': tipoEjercicio,
     }
 
-    ##return HttpResponse(cantidades)
     return render(request, 'ggalbas/visorActividades.html', data)
 
 def guardaRespuesta(request):
-    respuesta1 = request.POST['fill1']
+    parametros = request.POST['respuestaAlumno']
+    respuestaAlumno = parametros.split(sep=',')
+    pruebaGuia = request.session['prueba_guia']
+    rutAlumno = request.session['rut']
+    respuestas = TblAlumnoRespuestas.objects.filter(rut_alumno=rutAlumno, prueba_guia=pruebaGuia)
+    respuesta = {}
 
 
-    responde = json.dumps(respuesta1)
+    if respuestas:
+        npregunta = int(respuestas.last().npregunta) + 1
+    else:
+        npregunta= 1
 
-    return HttpResponse (respuesta1)
+    respuestaActividad = PreguntasInstancias.objects.using('e_test').filter(idprueba=pruebaGuia, npregunta=npregunta)
+    preguntas= Preguntas2Basico.objects.using('e_test').filter(idprueba=pruebaGuia, npregunta=npregunta)
+    correcta = respuestaActividad[0].respuesta_pregunta
+    cantidad = int(preguntas[0].num_campos_completar)
+    tipoE = preguntas[0].tipo_ejercicio
+    num = 0
+    instancias = 0
+
+    if tipoE ==1:
+        respCorrecta = correcta.replace('~', ",")
+        listaRespuestas = respCorrecta.split(sep=',')
+        for x in range(cantidad):
+             if listaRespuestas[x] == respuestaAlumno[x]:
+                 instancias+=1
+        instancia= int(instancias)/cantidad
+
+    else:
+        listaRespuestas = correcta.split(sep=',')
+        if listaRespuestas == respuestaAlumno:
+            instancia = 1
+        else:
+            instancia = 0
+
+    registroRespuesta = TblAlumnoRespuestas(rut_alumno=TblAlumnos.objects.get(rut_alumno=rutAlumno), npregunta=npregunta,prueba_guia=pruebaGuia,respuesta_alumno=respuestaAlumno,aprobada=instancia)
+    try:
+        registroRespuesta.save()
+        respuesta['alumnoRespuesta'] = True
+    except:
+        respuesta['alumnoRespuesta'] = False
+
+    responde = json.dumps(respuesta)
+
+
+    return HttpResponse (responde)
 
 def resultadoDiagnostico(request):
     

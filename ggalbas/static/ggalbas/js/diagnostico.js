@@ -73,8 +73,15 @@ function evaluaEjercicio(){
                 dataType: 'json',
                 data: { 'respuestaAlumno': respuestaAlumno },
                 success:function(respuesta){
-                    url = 'visorActividades';
-                    $(location).attr('href',url);
+                    if (respuesta.alumnoRespuesta){
+                        url = 'visorActividades';
+                        $(location).attr('href',url);
+                    }
+                    else{
+                    console.log ('aqui va el modal de error');
+                    }
+
+                   console.log(respuesta.alumnoRespuesta);
                 }
 
             });
