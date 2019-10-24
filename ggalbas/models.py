@@ -155,7 +155,7 @@ class TblAdministradores(models.Model):
 
 
 class TblAlumnoActividades(models.Model):
-    id_alumno_actividad = models.IntegerField(primary_key=True)
+    id_alumno_actividad = models.AutoField(primary_key=True)
     rut_alumno = models.ForeignKey('TblAlumnos', models.DO_NOTHING, db_column='rut_alumno', blank=True, null=True)
     id_contenido_fase_actividad = models.ForeignKey('TblContenidosFasesActividades', models.DO_NOTHING, db_column='id_contenido_fase_actividad', blank=True, null=True)
     fecha_inicio = models.DateTimeField(blank=True, null=True)
@@ -197,7 +197,7 @@ class TblAlumnoDiagnostico(models.Model):
 
 
 class TblAlumnoRespuestas(models.Model):
-    id_alumno_respuestas = models.IntegerField(primary_key=True)
+    id_alumno_respuestas = models.AutoField(primary_key=True)
     rut_alumno = models.ForeignKey('TblAlumnos', models.DO_NOTHING, db_column='rut_alumno', blank=True, null=True)
     npregunta = models.IntegerField(blank=True, null=True)
     prueba_guia = models.IntegerField(blank=True, null=True)
