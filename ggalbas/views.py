@@ -289,6 +289,7 @@ def guardaRespuesta(request):
     pruebaGuia = request.session['prueba_guia']
     rutAlumno = request.session['rut']
     respuestas = TblAlumnoRespuestas.objects.filter(rut_alumno=rutAlumno, prueba_guia=pruebaGuia)
+    totalPreg = Pruebas.objects.using('e_test').filter(idprueba=pruebaGuia)
     respuesta = {}
 
 
@@ -328,7 +329,7 @@ def guardaRespuesta(request):
     except:
         respuesta['alumnoRespuesta'] = False
 
-    if npregunta == int(registroRespuesta.npregunta):
+    if int(totalPreg[0].npreguntas) == int(registroRespuesta.npregunta):
         respuesta['fin'] = True
     else:
         respuesta['fin'] = False

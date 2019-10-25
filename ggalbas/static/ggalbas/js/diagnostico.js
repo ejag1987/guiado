@@ -73,12 +73,22 @@ function evaluaEjercicio(){
                 dataType: 'json',
                 data: { 'respuestaAlumno': respuestaAlumno },
                 success:function(respuesta){
-                    if (respuesta.alumnoRespuesta){
-                        url = 'visorActividades';
+
+                    if (respuesta.fin){
+                        url = 'resultadoDiagnostico';
                         $(location).attr('href',url);
+                        //console.log(respuesta.fin);
                     }
                     else{
+                        if (respuesta.alumnoRespuesta){
+                        url = 'visorActividades';
+                        $(location).attr('href',url);
+                        //console.log(respuesta.alumnoRespuesta);
+                         }
+                    else{
                     console.log ('aqui va el modal de error');
+                    }
+
                     }
 
                    console.log(respuesta.alumnoRespuesta);
