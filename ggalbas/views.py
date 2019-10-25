@@ -302,7 +302,6 @@ def guardaRespuesta(request):
     correcta = respuestaActividad[0].respuesta_pregunta
     cantidad = int(preguntas[0].num_campos_completar)
     tipoE = preguntas[0].tipo_ejercicio
-    num = 0
     instancias = 0
 
     if tipoE ==1:
@@ -320,12 +319,19 @@ def guardaRespuesta(request):
         else:
             instancia = 0
 
+
+
     registroRespuesta = TblAlumnoRespuestas(rut_alumno=TblAlumnos.objects.get(rut_alumno=rutAlumno), npregunta=npregunta,prueba_guia=pruebaGuia,respuesta_alumno=respuestaAlumno,aprobada=instancia)
     try:
         registroRespuesta.save()
         respuesta['alumnoRespuesta'] = True
     except:
         respuesta['alumnoRespuesta'] = False
+
+    if npregunta == int(registroRespuesta.npregunta):
+        respuesta['fin'] = True
+    else:
+        respuesta['fin'] = False
 
     responde = json.dumps(respuesta)
 
