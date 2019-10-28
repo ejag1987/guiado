@@ -777,7 +777,7 @@ body.template-modulo.border-green {
 
 .page-number span:before {
 	content: '';
-	background: url('images/objetos/img-block.png');
+	background: url('../../core/images/objetos/img-block.png');
 	background-size: contain;
 	background-repeat: no-repeat;
 	position: absolute;
