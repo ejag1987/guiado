@@ -3,11 +3,11 @@
 {% block title %} Actividad {{prueba}} {% endblock %}
 
 {% block barra %}
-    <div class="col-5 col-sm-3 col-lg-2 text-center d-flex align-items-center">
+    <div class="col-5 col-sm-3 col-lg-2 text-center d-flex align-items-center ">
         <button id="vuelveAnteP" type="button" class="btn btn-light rounded-pill box-shadow w-100"><span><img src="{% static 'core/images/objetos/triangle-curved.svg' %}" width="18"></span> Volver</button>
     </div>
     <div class="col-7 col-sm-9 col-lg-10">
-        <div class="barra-estado bg-white-50 rounded p-1 my-2 text-left">
+        <div class="barra-estado {% if  request.path == '/ggalbas/visorActividades' %} bg-white-75 {% else %} bg-white-50 {% endif %}  rounded p-1 my-2 text-left">
             <span class="px-2 align-middle d-inline-block"> Estás en: <strong>{{prueba}}</strong></span>
         </div>
     </div>
@@ -20,8 +20,8 @@
             {% for boton in botones %}
 
                 {% if boton.0 %}
-                    {% widthratio boton.0 5.014 1 as top %}
-                    {% widthratio boton.1 8.121 1 as left %}
+                    {% widthratio boton.0 5.105 1 as top %}
+                    {% widthratio boton.1 8.063 1 as left %}
                     {% widthratio boton.2 7.5 1 as width %}
                     {% widthratio boton.3 4.538 1 as height %}
 
