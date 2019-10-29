@@ -19,4 +19,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ggalbas/', include('ggalbas.urls')),
+    path('ggtutbas/', include('ggtutbas.urls')),
 ]
