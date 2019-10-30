@@ -35,9 +35,6 @@ def agregarAlumno(request):
     password = ''.join(random.choice(caracteres) for _ in range(6))
     now = datetime.datetime.now()
     fechaActual = now.strftime("%Y-%m-%d %H:%M:%S")
-    fecha = request.POST['fecha']
-    partes = fecha.split("T")[0].split("/")
-    nacimiento = "-".join(reversed(partes))
     lista = TblListas.objects.get(codigo_lista=str(codigoLista))
     respuesta = {}
 
@@ -61,7 +58,7 @@ def agregarAlumno(request):
                 except:
                     respuesta['status'] = 'error al guardar'
                 registroAlumno = TblAlumnos(rut_alumno=rut, nombre=nombres, apellido=apellidos, clave=password,
-                                            id_pregunta=pregunta, respuesta=answer, fecha_nacimiento=nacimiento,
+                                            id_pregunta=pregunta, respuesta=answer,
                                             id_producto=producto, activo=1, nuevo=1, autonomo=0,
                                             fecha_registro=fechaActual, codigo_lista=lista)
                 try:

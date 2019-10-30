@@ -14,6 +14,68 @@
 
     {% block content %} {% endblock %}
 
+    {% block modales %}
+       <!-- Modal Registro -->
+    <div id="modalOk" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+        <!-- Contenido del modal -->
+            <div class="modal-content position-relative">
+            <!--<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button></div>-->
+                <div class="modal-body text-center px-5 py-4">
+                    <div class="d-none d-sm-flex position-absolute" style="top: -50px;right: -50px;"><img src="{% static 'core/images/objetos/check.png' %}" alt="check"></div>
+                    <div class="textModal">
+                        <div>Tu password es</div>
+                        <div id="textoOkModal"></div>
+                        <div>presiona Aceptar y estarás listo</div>
+                        <div>para entrar al programa usando</div>
+                        <div>tu rut y password</div>
+                        <div class="azul">¡Anótala en un lugar seguro!</div>
+                    </div>
+                    <div class="d-inline-block">
+                        <button id="aceptar" type="button" class="btn btn-primary btn-lg btn-principal btn-block mb-3 cerrar" data-dismiss="modal">Aceptar</button>
+                    </div>
+                </div>
+               <!-- <div class="modal-footer"></div>-->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Error -->
+    <div id="modalError" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content position-relative">
+                <!--<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button></div>-->
+                <div class="modal-body text-center px-5 py-4">
+                 <!--   <div class="d-none d-sm-flex position-absolute" style="top: -50px;right: -50px; width: 17%"><img src="{% static 'core/images/objetos/cancel.png' %}" alt="cancelar"></div> -->
+                    <div id="textoErrorModal" class="textModal"></div>
+                    <div class="d-inline-block">
+                        <button type="button" class="btn btn-primary btn-lg btn-principal btn-block mb-3 cerrar" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+                <!--<div class="modal-footer"></div>-->
+            </div>
+        </div>
+    </div>
+
+        <!-- Modal Si No -->
+    <div class="modal fade" id="ModalResponderPreguntaSiNo" tabindex="-1" role="dialog" aria-labelledby="ModalResponderPreguntaSiNoTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content bg-white position-relative">
+                <div class="modal-body text-center px-5 py-4">
+                    No has respondido la pregunta, ¿Estás seguro que quieres avanzar? Responde Sí o No.
+                    <div class="d-inline-block w-100">
+                        <button type="button" class="d-inline-block mx-2 btn mt-2 btn-modal-no text-shadow box-shadow"
+                            data-dismiss="modal">No</button>
+                        <button type="button" class="d-inline-block mx-2 btn mt-2 btn-modal-si text-shadow box-shadow"
+                            data-dismiss="modal">Si</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     {% endblock %}
+
     <script src="{% static 'core/js/jquery-3.4.1.min.js' %}"></script>
     <script src="{% static 'core/js/jquery-ui.js' %}"></script>
     <script src="{% static 'core/js/popper.min.js' %}"></script>

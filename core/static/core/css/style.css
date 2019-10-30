@@ -1008,3 +1008,8 @@ span.icon-close:before {
 .template-modulo.border-blue .page-number {
 	background-color: #03A9F4;
 }
+
+.back:hover {
+    background: #86bc26 !important;
+    color: white ;
+}

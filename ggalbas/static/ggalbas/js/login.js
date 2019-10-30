@@ -94,7 +94,7 @@ $('#entrar').click(function(e){
         else{
           $('#errorPass').fadeOut('slow');
           if($('#img-captcha').text()!=$('#texto-captcha').val() || $('#texto-captcha').val()=="" ){
-            $('#errorCaptcha').html('<span> Ingrese un valor de captcha válido</span>').fadeIn(1000);
+            $('#errorCaptcha').html('<span>Ingrese los números del recuadro naranjo</span>').fadeIn(1000);
             console.log('captcha diferente');
           }
           else{
@@ -126,7 +126,7 @@ $('#entrar').click(function(e){
               else{
                 console.log(respuesta.status);
 
-                 $('#errorPass').html('<span>Rut o Contraseña inválida</span>').fadeIn(1000);
+                 $('#errorPass').html('<span>El rut y/o contraseña ingresados no son válidos</span>').fadeIn(1000);
               }
 
             }

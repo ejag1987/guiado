@@ -1,150 +1,107 @@
   var url = jQuery(location).attr('href');
 
   var Fn = {
-  // Valida el rut con su cadena completa "XXXXXXXX-X"
-  validaRut : function (rutCompleto) {
-    rutCompleto = rutCompleto.replace("‐","-");
-    if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test( rutCompleto ))
-      return false;
-    var tmp   = rutCompleto.split('-');
-    var digv  = tmp[1]; 
-    var rut   = tmp[0];
-    if ( digv == 'K' ) digv = 'k' ;
-    
-    return (Fn.dv(rut) == digv );
-  },
-  dv : function(T){
-    var M=0,S=1;
-    for(;T;T=Math.floor(T/10))
-      S=(S+T%10*(9-M++%6))%11;
-    return S?S-1:'k';
-  }
-}
-$(function(){
-$('#fecha').datepicker({
-    changeMonth: true,
-    changeYear: true,
-    dateFormat: 'dd/mm/yy',
-    firstDay: 1,
-    maxDate: '+od'
 
-});
-});
-validaForm();
+      // Valida el rut con su cadena completa "XXXXXXXX-X"
+
+      validaRut : function (rutCompleto) {
+        rutCompleto = rutCompleto.replace("‐","-");
+        if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test( rutCompleto ))
+          return false;
+        var tmp   = rutCompleto.split('-');
+        var digv  = tmp[1];
+        var rut   = tmp[0];
+        if ( digv == 'K' ) digv = 'k' ;
+        return (Fn.dv(rut) == digv );
+      },
+      dv : function(T){
+        var M=0,S=1;
+        for(;T;T=Math.floor(T/10))
+          S=(S+T%10*(9-M++%6))%11;
+        return S?S-1:'k';
+      }
+}
+
+ validaForm();
 
 
 function validaForm(){
-  var rut, validador, curso, letra, lista, nombres, apellidos, pregunta, respuesta;
-  $('#registro').on('click', function(){
-  rut = $('#rut').val();
-  validador =  $('#validador').val();
-  curso = $('#curso').val();
-  letra = $('#letra').val();
-  lista = $('#codigo-lista').val();
-  nombres = $('#nombres').val();
-  apellidos = $('#apellidos').val();
-  pregunta = $('#pregunta').val();
-  fecha = $('#fecha').val();
-  respuesta = $('#respuesta').val();
 
-  if ((rut=="") || (validador=="")){
-    $('#error').html('<span>Debe colocar su rut para registrarse</span>').fadeIn(1000);
-      }
-  else{
-      $('#error').html('');
-      var rutValidado = Fn.validaRut(rut+'-'+validador);
-      if(rutValidado == false){
-        $('#error').html('<span>Debe ingresar un Rut válido</span>').fadeIn(1000);
-     }
-      else{
-        $('#error').html('');
-        if ((curso=="") || (letra=="")){
-        $('#error').html('<span>Debe seleccionar su curso</span>').fadeIn(1000);
-        }
-        else{
-        $('#error').html('');
-          if(lista==""){
-          $('#error').html('<span>Debe ingresar el código lista</span>').fadeIn(1000);
+  $('#registro').on('click', function(){
+
+      if ($('#rut').val() =="" || $('#validador').val()==""){
+            $('#textoErrorModal').html('Para registrarse ingrese su RUT');
+            $('#modalError').modal("show");
+       }
+       else if (Fn.validaRut($('#rut').val()+'-'+$('#validador').val())==false){
+          $('#textoErrorModal').html('Debe ingresar un Rut válido');
+          $('#modalError').modal("show");
+       }
+       else if (($('#curso').val()=="") || ($('#letra').val()=="")){
+          $('#textoErrorModal').html('Para registrarse complete su curso');
+          $('#modalError').modal("show");
+       }
+       else if($('#codigo-lista').val().trim()==""){
+            $('#textoErrorModal').html('Para registrarse ingrese el código de lista');
+            $('#modalError').modal("show");
+       }
+        else if($('#nombres').val().trim()=="" || $("#nombres").val().trim().length < 3 ){
+           $('#textoErrorModal').html('Para registrarse ingrese sus nombres');
+           $('#modalError').modal("show");
+       }
+        else if($('#apellidos').val().trim()=="" || $("#apellidos").val().trim().length < 3){
+           $('#textoErrorModal').html('Para registrarse ingrese sus apellidos');
+           $('#modalError').modal("show");
+       }
+       else if($('#pregunta').val()==""){
+           $('#textoErrorModal').html('Para registrarse seleccione una pregunta de seguridad');
+           $('#modalError').modal("show");
+       }
+       else if($('#respuesta').val().trim()==""){
+            $('#textoErrorModal').html('Para registrarse escriba la respuesta a la pregunta de seguridad');
+            $('#modalError').modal("show");
           }
           else{
-          $('#error').html('');
-          if (fecha ==''){
-            $('#error').html('<span>Debe colocar su fecha de nacimiento</span>').fadeIn(1000);
-          }
-          else{
-          $('#error').html('');
-          if(pregunta==""){
-            $('#error').html('<span>Debe elegir una pregunta</span>').fadeIn(1000);
-          }
-          else{
-          $('#error').html('');
-          if(respuesta==""){
-            $('#error').html('<span>Debe ingresar una respuesta</span>').fadeIn(1000);
-          }
-          else{
-          $('#error').html('');
-          var parametros= { rut:rut+'-'+validador, 
-                            curso: curso, 
-                            letra: letra, 
-                            codigoLista: lista, 
-                            nombres: nombres, 
-                            apellidos: apellidos,
-                            fecha: fecha,
-                            pregunta: pregunta, 
-                            respuesta: respuesta
-                          };
+
           $.ajax({
                   async: true,
                   type: "POST",
                   url: url+"/agregarAlumno",
                   dataType: 'json',
-                  data: parametros,
+                  data: {   rut: $('#rut').val()+'-'+$('#validador').val(),
+                            curso: $('#curso').val(),
+                            letra: $('#letra').val(),
+                            codigoLista: $('#codigo-lista').val(),
+                            nombres: $('#nombres').val(),
+                            apellidos: $('#apellidos').val(),
+                            pregunta: $('#pregunta').val(),
+                            respuesta: $('#respuesta').val()
+                          },
                   success: function(respuesta){
-                    console.log(respuesta);
-                    if(respuesta.alumno=='alumno existe'){
-                      $('#modalError').modal("show");
-                      $('#textoErrorModal').html('El rut ingresado ya se encuentra registrado'); 
-                    }
-                    else{
-                      $('#textoErrorModal').html('');
-                      if(respuesta.lista=='error'){
-                        $('#modalError').modal("show");
-                      $('#textoErrorModal').html('Codigo lista incorrecto');
-                      }
-                      else{
-                        $('#textoErrorModal').html('');
-                        if(!respuesta.cupo){
+                        if(respuesta.alumno=='alumno existe'){
+                          $('#textoErrorModal').html('El rut ingresado ya se encuentra registrado');
                           $('#modalError').modal("show");
+                        }
+                        else  if(respuesta.lista=='error'){
+                          $('#textoErrorModal').html('El código de lista no es válido para el curso y letra ingresados');
+                          $('#modalError').modal("show");
+                        }
+                        else if(!respuesta.cupo){
                           $('#textoErrorModal').html('no hay cupo');
-
+                          $('#modalError').modal("show");
                         }
-                        else{ 
-                         $('#modalOk').modal("show");
-                         $('#textoOkModal').html(respuesta.password);
-                         regresaIndex();
-                        
-
+                        else{
+                           $('#textoOkModal').html(respuesta.password);
+                            $('#modalOk').modal("show");
+                           regresaIndex();
                         }
-                        
-                      }
-                      
-                    }
-
-
-                  },
+                      },
                   error: function(){
-                    console.log('error del sistema');
                      $('#modalError').modal("show");
-                      $('#textoErrorModal').html('Error al Registrar al Alumno');
+                     $('#textoErrorModal').html('Error al Registrar al Alumno');
                   }
                 });
-           }
-          }
-         }
-         }
         }
-      }
-    }
   });
 }
 
