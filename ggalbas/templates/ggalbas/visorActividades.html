@@ -34,11 +34,11 @@
                     </div>
                     {% endif %}
                     {% if tipoE == 2 %}
-                        <input type="radio" id="{{forloop.counter}}" name="radios" value="false" class="radio-input">
+                        <input type="radio" id="{{forloop.counter}}" name="radios" value="false" class="radio-check">
                         <label for="{{forloop.counter}}" style="width:{{width}}%;height: {{height}}%;left: {{left}}%;top: {{top}}%;background: transparent !important;"></label>
                     {% endif %}
                     {% if tipoE == 3 %}
-                        <input type="checkbox" id="{{forloop.counter}}" name="check" value="false" class="checkbox-input">
+                        <input type="checkbox" id="{{forloop.counter}}" name="check" value="false" class="radio-check">
                         <label for="{{forloop.counter}}" style="width:{{width}}%;height: {{height}}%;left: {{left}}%;top: {{top}}%;background: transparent !important;"></label>
                     {% endif %}
 
@@ -59,7 +59,7 @@
         </div>
         <div class="btn-arrow-right position-absolute">
 
-            <a href="#" class="d-flex"><div id="flecha" class="flecha">{% csrf_token %}</div>
+            <a href="#" class="d-flex"><div id="flecha" class="flecha" onclick="proximoEjercicio()">{% csrf_token %}</div>
             </a>
         </div>
 
@@ -83,19 +83,7 @@
                 </div>
 </div>
 
-<div class="modal fade" id="ModalEjercicio" tabindex="-1" role="dialog" aria-labelledby="ModalResponderEjercicioTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content position-relative">
-                <div class="modal-body text-center px-5 py-4">
-                    <div class="d-none d-sm-flex position-absolute" style="top: -50px;right: -50px;"><img src="{% static 'core/images/objetos/laptop-atencion.png' %}" alt="Atención"></div>
-                        Debes responder el ejercicio para avanzar.
-                    <div class="d-inline-block w-100">
-                        <button type="button" class="btn mt-2 btn-modal-ok text-shadow box-shadow" data-dismiss="modal">OK</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
 {% endblock %}
 {% block extrascript %}

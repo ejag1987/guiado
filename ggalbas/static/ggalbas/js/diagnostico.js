@@ -1,70 +1,64 @@
 var url;
+var respuestaAlumno;
 
-$('#continuar').on('click', function(){
-    url = "portadaVisor";
-    $(location).attr('href',url);
+$( document ).ready(function() {
+
+    $('#continuar').on('click', function(){
+        url = 'portadaVisor';
+        $(location).attr('href',url);
+    });
+
+    $('#vuelveAnteP').on('click', function(){
+        url = 'antePortada';
+        $(location).attr('href',url);
+    });
+
 });
 
-$('#vuelveAnteP').on('click', function(){
-    url = 'antePortada';
-    $(location).attr('href',url);
-});
+function proximoEjercicio(){
 
-
-function evaluaEjercicio(){
-
-    $('#flecha').on('click', function(){
-
-        var respuestaAlumno = '';
         var abecedario=new Array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
 
         var continuar=1;
-        var selecciona_check=0;
-        var selecciona_radio=0;
+
+        var valor = '';
+
+        respuestaAlumno = '';
 
         if ($('.fill-input').length) { // los campos son de tipo text
-            
-            $(".fill-input").each(function (index) {  
-                if($(this).val()==''){
+            $(".fill-input").each(function (index) {
+                if($(this).val().trim()==''){
+                    valor= 'null';
                     continuar = 0;
-                    $('#ModalEjercicio').modal('show');
-                    return false;
+                }else{
+                    valor = $(this).val();
                 }
-                respuestaAlumno += respuestaAlumno == '' ? $(this).val() : ","+$(this).val();
+                respuestaAlumno += respuestaAlumno == '' ? valor : ","+valor;
             });
         }
 
-        if ($('.radio-input').length) { // los campos son de tipo radio
-           
-            $(".radio-input").each(function (index) {             
-                if($(this).is(':checked')) {  
-                    selecciona_radio =1;
+
+        if ($('.radio-check').length) { // los campos son de tipo radio o de tipo checkbox.
+            $(".radio-check").each(function (index) {
+                if($(this).is(':checked')) {
                     respuestaAlumno += abecedario[parseInt($(this).attr('id')) -1];
                 }          
             });
 
-            if(selecciona_radio==0){
+            if(respuestaAlumno == ''){
                 continuar = 0;
-                $('#ModalEjercicio').modal('show');
             }
         }
 
-        if ($('.checkbox-input').length) { // los campos son de tipo checkbox
-
-            $(".checkbox-input").each(function (index) {             
-                if($(this).is(':checked')) {  
-                    selecciona_check =1; 
-                    respuestaAlumno += abecedario[parseInt($(this).attr('id')) -1];
-                }         
-            });
-        
-            if(selecciona_check==0){
-                continuar = 0;
-                $('#ModalEjercicio').modal('show');
+          if(continuar==0){
+                $('#ModalConfirmacion').modal('show');
+            }else{
+                guardaRespuesta();
             }
-        }
- 
-        if (continuar==1){
+
+}
+
+function guardaRespuesta(){
 
             $.ajax({
                 async: true,
@@ -77,28 +71,15 @@ function evaluaEjercicio(){
                     if (respuesta.fin){
                         url = 'resultadoDiagnostico';
                         $(location).attr('href',url);
-                        //console.log(respuesta.fin);
                     }
-                    else{
-                        if (respuesta.alumnoRespuesta){
-                        url = 'visorActividades';
-                        $(location).attr('href',url);
-                        //console.log(respuesta.alumnoRespuesta);
-                         }
-                    else{
-                    console.log ('aqui va el modal de error');
+                    else if (respuesta.alumnoRespuesta){
+                         url = 'visorActividades';
+                         $(location).attr('href',url);
+                    } else{
+                        console.log ('aqui va el modal de error');
                     }
-
-                    }
-
-                   console.log(respuesta.alumnoRespuesta);
                 }
-
             });
-        }
-        
-    });
-
 }
 
-evaluaEjercicio();
+

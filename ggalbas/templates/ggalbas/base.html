@@ -26,8 +26,38 @@
         </div>
     </div>
 
+    {% block modales %}
 
+    <div class="modal fade" id="ModalEjercicio" tabindex="-1" role="dialog" aria-labelledby="ModalResponderEjercicioTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content position-relative">
+                <div class="modal-body text-center px-5 py-4">
+                    <div class="d-none d-sm-flex position-absolute" style="top: -50px;right: -50px;"><img src="{% static 'core/images/objetos/laptop-atencion.png' %}" alt="Atención"></div>
+                        Debes responder el ejercicio para avanzar.
+                    <div class="d-inline-block w-100">
+                        <button type="button" class="btn mt-2 btn-modal-ok text-shadow box-shadow" data-dismiss="modal">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+        <!-- Modal Si No -->
+    <div class="modal fade" id="ModalConfirmacion" tabindex="-1" role="dialog" aria-labelledby="ModalResponderPreguntaSiNoTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content bg-white position-relative">
+                <div class="modal-body text-center px-5 py-4">
+                    No has respondido la pregunta, ¿Estás seguro que quieres avanzar? Responde Sí o No.
+                    <div class="d-inline-block w-100">
+                        <button type="button" class="d-inline-block mx-2 btn mt-2 btn-modal-no text-shadow box-shadow" data-dismiss="modal">No</button>
+                        <button type="button" class="d-inline-block mx-2 btn mt-2 btn-modal-si text-shadow box-shadow" onclick="guardaRespuesta()">Si</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ {% endblock %}
 
     <script src="{% static 'core/js/jquery-3.4.1.min.js' %}"></script>
     <script src="{% static 'core/js/jquery-ui.js' %}"></script>

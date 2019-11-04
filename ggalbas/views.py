@@ -35,7 +35,6 @@ def agregarAlumno(request):
     password = ''.join(random.choice(caracteres) for _ in range(6))
     now = datetime.datetime.now()
     fechaActual = now.strftime("%Y-%m-%d %H:%M:%S")
-    lista = TblListas.objects.get(codigo_lista=str(codigoLista))
     respuesta = {}
 
     ##se consulta si el rut ingresado pertenece a algun alumno
@@ -60,7 +59,7 @@ def agregarAlumno(request):
                 registroAlumno = TblAlumnos(rut_alumno=rut, nombre=nombres, apellido=apellidos, clave=password,
                                             id_pregunta=pregunta, respuesta=answer,
                                             id_producto=producto, activo=1, nuevo=1, autonomo=0,
-                                            fecha_registro=fechaActual, codigo_lista=lista)
+                                            fecha_registro=fechaActual, codigo_lista=TblListas.objects.get(codigo_lista=str(codigoLista)))
                 try:
                     registroAlumno.save()
                     respuesta['alumno'] = 'ok'
@@ -398,7 +397,7 @@ def calculoDiagnostico(request):
 
     pruebaGuia = request.session['prueba_guia']
     prueba = request.session['prueba']    
-    rut        = request.session['rut']
+    rut = request.session['rut']
     
     # obtengo solo los dos primeros caracteres para determinar cual actividad es.
     codigo_actividad = prueba[0:2]
