@@ -415,6 +415,9 @@ header.panel-celeste,
 .bg-green {
 	background: #8BC34A;
 }
+.bg-verde {
+    background: #03aa02;
+}
 
 .bg-gray {
 	background: #fbfbfb;
@@ -553,6 +556,9 @@ body.template-modulo {
 
 .template-modulo.border-transparent .box-container {
     padding: 0;
+}
+body.border-green{
+background: #8fd43e;
 }
 
 body.template-modulo.border-green {
