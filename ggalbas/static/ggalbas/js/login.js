@@ -1,5 +1,6 @@
 $('#entrar').attr("disabled", true);
 var url = jQuery(location).attr('href');
+
  function cargaAnimacion(){
   $('#loader').html('<img src="/static/ggalbas/images/loader.gif" alt="loader">').fadeOut(1000);
   return true;
@@ -142,62 +143,105 @@ validaRutIp();
 function validaRutIp(){
 
   $('#rut').on('blur', function(){
+
     var rut = $(this).val();
+
     $('#validador').keyup(function(){
+
       var validador= $(this).val();
+
       var rutCompleto = rut+'-'+validador;
+
       if (rut=="" || validador==""){
+
         console.log('rut o validador vacios');
+
       }
       else{
+
         var rutValidado = Fn.validaRut(rutCompleto);
-            cargaAnimacion();
+
+        cargaAnimacion();
 
             if (rutValidado == false){
+
               $('#errorRut').html('<span>Debe ingresar un Rut válido</span>').fadeIn(1000);
+
               quitarPassword();
+
               desactivarCaptcha();
                
             }
             else {
-              cargaAnimacion();
-              $('#errorRut').fadeOut('slow');
-              $.getJSON("http://jsonip.com?callback=?", function (data){
-                $.ajax({
-                  async: true,
-                  type: "POST",
-                  url: url+"verificaRutIp",
-                  dataType: 'json',
-                  data: {
-                    ip: data.ip,
-                    rut: rutCompleto
-                  },
-                  success: function(respuesta){
-                    cargaAnimacion();
-                    console.log(respuesta);
-                    $('#entrar').removeAttr("disabled");
-                    if(respuesta.status=='validado'){
-                      quitarPassword();
-                      desactivarCaptcha();
-                      $('#input-password').html('');
-                      validaIngresoRut();
-                    }
-                    else{
-                      console.log('no validado');
-                      mostrarPassword();
-                      $('#input-password').html(respuesta.formulario);
-                      mostrarCaptcha();
-                      validaIngresoCompleto(data.ip);
-                    }
-                  },
-                  error: function(){
-                    console.log('hay un error');
-                  }
-                });
-              });
+
+             cargaAnimacion();
+
+             $('#errorRut').fadeOut('slow');
+
+             $.getJSON( "http://jsonip.com?callback=?", function(data) {
+                verificaRutIp(rutCompleto,data.ip)
+             })
+             .fail(function() {
+                $.ajax( "obtenerIp" )
+                      .done(function(ip) {
+                       verificaRutIp(rutCompleto,ip)
+                      });
+             });
+
             } 
       }
     });
   });
+}
+
+function verificaRutIp(rut,ip){
+
+$.ajax({
+      async: true,
+      type: "POST",
+      url: url+"verificaRutIp",
+      dataType: 'json',
+      data: {
+        'ip': ip,
+        'rut': rut
+      },
+      success: function(respuesta){
+
+        cargaAnimacion();
+
+        console.log(respuesta);
+
+        $('#entrar').removeAttr("disabled");
+
+        if(respuesta.status=='validado'){
+
+              quitarPassword();
+
+              desactivarCaptcha();
+
+              $('#input-password').html('');
+
+              validaIngresoRut();
+
+        }
+        else{
+
+              console.log('no validado');
+
+              mostrarPassword();
+
+              $('#input-password').html(respuesta.formulario);
+
+              mostrarCaptcha();
+
+              validaIngresoCompleto(ip);
+
+        }
+      },
+      error: function(){
+        console.log('hay un error');
+      }
+    });
+
 }
 

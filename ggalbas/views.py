@@ -3,6 +3,7 @@ import random
 import string
 import datetime
 import base64
+import socket
 from datetime import date
 
 from django.http import HttpResponse
@@ -491,3 +492,6 @@ def calculoDiagnostico(request):
     eje10 = (PuntajesEje[10]*100)/(CantPregEje[10]) if CantPregEje[10] > 0 else 0
     
     return punto_prerequisito,punto_nivel,h1, h2,h3, eje1, eje2, eje3, eje4, eje5, eje6, eje7, eje8, eje9, eje10
+
+def obtenerIp(request):
+    return HttpResponse(socket.gethostbyname(socket.gethostname()))

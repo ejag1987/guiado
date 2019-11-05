@@ -16,6 +16,7 @@ urlpatterns = [
     path('portadaVisor', views.portadaVisor, name='portadaVisor'),
     path('visorActividades', views.visorActividades, name='visorActividades'),
     path('guardaRespuesta', views.guardaRespuesta, name='guardaRespuesta'),
-    path('resultadoDiagnostico', views.resultadoDiagnostico, name='resultadoDiagnostico'),    
+    path('resultadoDiagnostico', views.resultadoDiagnostico, name='resultadoDiagnostico'),
+    path('obtenerIp', views.obtenerIp, name='obtenerIp'),
 ]
 
