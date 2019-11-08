@@ -18,5 +18,6 @@ urlpatterns = [
     path('guardaRespuesta', views.guardaRespuesta, name='guardaRespuesta'),
     path('resultadoDiagnostico', views.resultadoDiagnostico, name='resultadoDiagnostico'),
     path('obtenerIp', views.obtenerIp, name='obtenerIp'),
+    path('unidadesAlumno', views.unidadesAlumno, name='unidadesAlumno'),
 ]
 

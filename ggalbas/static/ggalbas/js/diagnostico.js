@@ -67,14 +67,11 @@ function guardaRespuesta(){
                 dataType: 'json',
                 data: { 'respuestaAlumno': respuestaAlumno },
                 success:function(respuesta){
-
                     if (respuesta.fin){
-                        url = 'resultadoDiagnostico';
-                        $(location).attr('href',url);
+                        $(location).attr('href','resultadoDiagnostico');
                     }
                     else if (respuesta.alumnoRespuesta){
-                         url = 'visorActividades';
-                         $(location).attr('href',url);
+                         $(location).attr('href','visorActividades');
                     } else{
                         console.log ('aqui va el modal de error');
                     }

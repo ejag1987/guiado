@@ -14,7 +14,6 @@ $('#input-password').removeClass('oculto');
  function mostrarCaptcha(){
   $('#captcha').removeClass('oculto');
   $('#captcha').css('display', 'flex');
-
  }
  function desactivarCaptcha(){
   $('#captcha').addClass('oculto');
@@ -32,19 +31,13 @@ $('#input-password').removeClass('oculto');
                     rut: $('#rut').val()+-+$('#validador').val() 
             },
             success: function (respuesta){
-             console.log(respuesta);
-              //console.log('estoy aqui');
-              if(respuesta.status=='datos alumno ok'){
-                if (respuesta.nuevo){
-                    var url = "antePortada";
-                    $(location).attr('href',url);
-                }
-
-               console.log(respuesta.nombreCompleto)
-
-              }
-
-
+                  if(respuesta.status=='datos alumno ok'){
+                    if (respuesta.nuevo){
+                        $(location).attr('href',"antePortada");
+                    }else{
+                        $(location).attr('href',"unidadesAlumno");
+                    }
+                  }
             }
 
     });
@@ -112,24 +105,16 @@ $('#entrar').click(function(e){
             success: function (respuesta){
               $('#errorPass').fadeOut('slow');
               $('#errorCaptcha').fadeOut('slow');
-
-              console.log(respuesta);
               if(respuesta.status=='datos alumno ok'){
-                console.log(respuesta.nivelacion)
-                if(respuesta.status=='datos alumno ok'){
-                if (respuesta.nuevo){
-                    var url = "antePortada";
-                    $(location).attr('href',url);
-                }
-
-              }
+                    if (respuesta.nuevo){
+                        $(location).attr('href',"antePortada");
+                    }else{
+                        $(location).attr('href',"unidadesAlumno");
+                    }
               }
               else{
-                console.log(respuesta.status);
-
                  $('#errorPass').html('<span>El rut y/o contraseña ingresados no son válidos</span>').fadeIn(1000);
               }
-
             }
           });
           }

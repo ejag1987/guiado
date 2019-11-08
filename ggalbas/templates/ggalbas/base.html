@@ -11,8 +11,9 @@
     <link rel="stylesheet" href="{% static 'ggalbas/css/style.css' %}">
 
 </head>
-<body class="d-flex flex-column flex-wrap vertical-center {% if request.path == '/ggalbas/visorActividades' %} border-green {% endif %} " style="{% if request.path == '/ggalbas/antePortada' %} background-image: url('{% static 'core/images/fondos/bg-diagnostico.png' %} {% elif request.path == '/ggalbas/portadaVisor' %} background-image: url('{% static 'core/images/fondos/Diag-PInicial-Fondo1.png' %} {% endif %}');">
-    <div class="header modulo-info d-md-inline-block text-center  px-3 w-100 shadow-sm {% if request.path == '/ggalbas/antePortada' %}panel-celeste py-2 {% elif request.path == '/ggalbas/visorActividades' %} align-self-start text-white {% else %} bg-blue align-self-start text-white {% endif %}" >
+<body class="d-flex flex-column flex-wrap vertical-center {% if request.path == '/ggalbas/visorActividades' %} border-green {% endif %} " style="{% block bg-imagen %} {% endblock %}">
+
+    <div class="header modulo-info d-md-inline-block text-center  px-3 w-100 shadow-sm {% block header %} bg-blue align-self-start text-white {% endblock %}" >
         <div class="row">
         {% block barra %} {% endblock %}
         </div>

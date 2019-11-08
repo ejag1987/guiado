@@ -192,7 +192,6 @@ def ingresoSoloRut(request):
         request.session['nivel'] = niveles[0].nivel+'-'+listas[0].letra
         request.session['rbd'] = rbd[0].nombre_institucion
 
-
         if consulta[0].nuevo == 1:
            respuesta['nuevo']= True
            prueba = 'P'+ nivel +'GG'+'01'+year
@@ -208,7 +207,7 @@ def ingresoSoloRut(request):
 
 
 def antePortada(request):
-    nombres= request.session['nombres']
+    nombres = request.session['nombres']
     nivel = request.session['nivel']
     rbd = request.session['rbd']
     return render(request, 'ggalbas/antePortada.html', {'nombres': nombres, 'nivel': nivel, 'rbd': rbd})
@@ -217,7 +216,7 @@ def portadaVisor(request):
     prueba = request.session['prueba']
     consultaActividad = Pruebas.objects.using('e_test').filter(codprueba=prueba)
     if consultaActividad:
-        ## se guarda en una variable de sesion el id de la prueba o guia que corresponda
+        # # se guarda en una variable de sesion el id de la prueba o guia que corresponda
         request.session['prueba_guia'] = consultaActividad[0].idprueba
         descripcion = consultaActividad[0].descprueba
     else:
@@ -226,13 +225,13 @@ def portadaVisor(request):
     return render(request, 'ggalbas/portadaVisor.html', {'prueba': prueba, 'descripcion': descripcion})
 
 def visorActividades(request):
-    pruebaGuia= request.session['prueba_guia']
+    pruebaGuia = request.session['prueba_guia']
     prueba = request.session['prueba']
     actividad = TblActividades.objects.filter(prueba_guia=pruebaGuia)
-    rutAlumno= request.session['rut']
+    rutAlumno = request.session['rut']
 
     if actividad:
-        descripcion= actividad[0].descripcion_actividades
+        descripcion = actividad[0].descripcion_actividades
     else:
         datosPruebas = Pruebas.objects.using('e_test').filter(codprueba=prueba, idprueba=pruebaGuia)
         if datosPruebas:
@@ -243,13 +242,13 @@ def visorActividades(request):
                 actividades.save()
             except:
                 print('no se guardo')
-            descripcion= 'sin'
+            descripcion = 'sin'
         else:
-            descripcion= 'no hay actividad'
+            descripcion = 'no hay actividad'
 
     preguntas = Preguntas2Basico.objects.using('e_test').filter(idprueba=pruebaGuia)
-    respuestas= TblAlumnoRespuestas.objects.filter(rut_alumno=rutAlumno, prueba_guia=pruebaGuia)
-##revisar el if ##
+    respuestas = TblAlumnoRespuestas.objects.filter(rut_alumno=rutAlumno, prueba_guia=pruebaGuia)
+
     if respuestas:
         npregunta=  int(respuestas.last().npregunta)
         img = base64.b64encode(preguntas[npregunta].imagen).decode()
@@ -317,8 +316,6 @@ def guardaRespuesta(request):
         else:
             instancia = 0
 
-
-
     registroRespuesta = TblAlumnoRespuestas(rut_alumno=TblAlumnos.objects.get(rut_alumno=rutAlumno), npregunta=npregunta,prueba_guia=pruebaGuia,respuesta_alumno=respuestaAlumno,aprobada=instancia)
     try:
         registroRespuesta.save()
@@ -333,33 +330,91 @@ def guardaRespuesta(request):
 
     responde = json.dumps(respuesta)
 
-
-    return HttpResponse (responde)
+    return HttpResponse(responde)
 
 def resultadoDiagnostico(request):
 
-    prueba = request.session['prueba'] 
-
+    pruebaGuia = request.session['prueba_guia']
+    prueba = request.session['prueba']
     rut = request.session['rut']
+    nombres = request.session['nombres']
 
-    nombres = request.session['nombres']    
-    
-    id_contenido_fase_actividad=1
+    cant = 0  # cantidad de preguntas
+    puntaje_pre = 0
+    puntaje_nivel = 0
+    punto_prerequisito = 0
+    punto_nivel = 0
+    HabilidadPreg = dict()
+    EjePreg = dict()
+    CantPregHabilidad = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
+    CantPregEje = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0}
+    codigo_actividad = prueba[0:2]
+    PuntajesEje = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0}
+    PuntajesHabilidad = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
+    # indice que separa las preguntas de pre-requisito y las de nivel.
+    preguntas_prueba = {'P3': 10, 'P4': 10, 'P5': 16, 'P6': 16, 'P7': 16, 'P8': 16}
 
-    punto_prerequisito,punto_nivel,h1,h2,h3,eje1,eje2,eje3,eje4,eje5,eje6,eje7,eje8,eje9,eje10 = calculoDiagnostico(request)
-    
-    #obtener la fecha deinicio de la actividad.
-    #fecha_inicio
+    TblPreguntas_set = TblPreguntas.objects.filter(siglas=codigo_actividad)
 
-    #actualizar la fecha de fin de la actividad.
+    for result in TblPreguntas_set:
 
-    #guarda el resultado en tabla TblAlumnoDiagnostico
+        objHabilidades = result.id_habilidad
+        objEje = result.id_eje
+        HabilidadPreg[result.npregunta] = int(objHabilidades.id_habilidad)
+        EjePreg[result.npregunta] = int(objEje.id_eje)
+        CantPregHabilidad[int(objHabilidades.id_habilidad)] += 1
+        CantPregEje[int(objEje.id_eje)] += 1
+
+    TblAlumnoRespuestas_set = TblAlumnoRespuestas.objects.filter(rut_alumno=TblAlumnos.objects.get(rut_alumno=rut), prueba_guia=pruebaGuia)
+
+    # recorre las respuestas del alumno.
+    for record in TblAlumnoRespuestas_set:
+
+        cant += 1
+
+        aprobada = 0 if record.aprobada < 1 else record.aprobada
+
+        if int(record.npregunta) <= int(preguntas_prueba[codigo_actividad]):
+            puntaje_pre += aprobada
+        else:
+            puntaje_nivel += aprobada
+
+        PuntajesEje[int(EjePreg[record.npregunta])] += aprobada
+
+        PuntajesHabilidad[int(HabilidadPreg[record.npregunta])] += aprobada
+
+    # calcula los porcentaje de pre-requisito y de nivel.
+    if cant > 0:
+        punto_prerequisito = round((puntaje_pre * 100) / int(preguntas_prueba[codigo_actividad]))
+        punto_nivel = round((puntaje_nivel * 100) / (cant - int(preguntas_prueba[codigo_actividad]))) if puntaje_nivel > 0 else 0
+
+    punto_prerequisito = 1 if punto_prerequisito == 0 else punto_prerequisito
+
+    punto_nivel = 1 if punto_nivel == 0 else punto_nivel
+
+    h1 = (PuntajesHabilidad[1] * 100) / (CantPregHabilidad[1]) if CantPregHabilidad[1] > 0 else ''
+    h2 = (PuntajesHabilidad[2] * 100) / (CantPregHabilidad[2]) if CantPregHabilidad[2] > 0 else ''
+    h3 = (PuntajesHabilidad[3] * 100) / (CantPregHabilidad[3]) if CantPregHabilidad[3] > 0 else ''
+    eje1 = (PuntajesEje[1] * 100) / (CantPregEje[1]) if PuntajesEje[1] > 0 else 0
+    eje2 = (PuntajesEje[3] * 100) / (CantPregEje[3]) if PuntajesEje[3] > 0 else 0
+    eje3 = (PuntajesEje[2] * 100) / (CantPregEje[2]) if PuntajesEje[2] > 0 else 0
+    eje4 = (PuntajesEje[4] * 100) / (CantPregEje[4]) if PuntajesEje[4] > 0 else 0
+    eje5 = (PuntajesEje[5] * 100) / (CantPregEje[5]) if PuntajesEje[5] > 0 else 0
+    eje6 = (PuntajesEje[6] * 100) / (CantPregEje[6]) if CantPregEje[6] > 0 else 0
+    eje7 = (PuntajesEje[8] * 100) / (CantPregEje[8]) if CantPregEje[8] > 0 else 0
+    eje8 = (PuntajesEje[7] * 100) / (CantPregEje[7]) if CantPregEje[7] > 0 else 0
+    eje9 = (PuntajesEje[9] * 100) / (CantPregEje[9]) if CantPregEje[9] > 0 else 0
+    eje10 = (PuntajesEje[10] * 100) / (CantPregEje[10]) if CantPregEje[10] > 0 else 0
+
+    # obtener la fecha de inicio de la actividad.
+    # actualizar la fecha de fin de la actividad.
+
     now = datetime.datetime.now()
 
     fechaActual = now.strftime("%Y-%m-%d %H:%M:%S")
-    
+
     registro = TblAlumnoDiagnostico(rut_alumno=TblAlumnos.objects.get(rut_alumno=rut), 
-                                    id_contenido_fase_actividad=id_contenido_fase_actividad,
+                                    id_actividad=TblActividades.objects.get(prueba_guia=pruebaGuia),
                                     fecha_inicio=fechaActual,
                                     fecha_fin=fechaActual,
                                     punto_prerequisito=punto_prerequisito,
@@ -377,121 +432,35 @@ def resultadoDiagnostico(request):
                                     eje8=eje8,
                                     eje9=eje9,
                                     eje10=eje10)
-    
     try:
-        registro.save() 
+        registro.save()
     except:
         print('no se guardo')
 
+    # actualiza el campo nuevo en tabla alumno.
+    objAlumno = TblAlumnos.objects.filter(rut_alumno=rut)
+    objAlumno.update(nuevo=0)
+
+    Actividad = TblActividades.objects.filter(prueba_guia=pruebaGuia)
+    descripcion = Actividad[0].descripcion_actividades
+
     data = {
-        'punto_prerequisito':punto_prerequisito, 
-        'punto_nivel':punto_nivel, 
+        'prueba': prueba,
+        'descripcion': descripcion,
         'nombres': nombres,
-        'prueba':prueba
+        'punto_prerequisito': punto_prerequisito,
+        'punto_nivel': punto_nivel,
     }
-    
-    #return HttpResponse('termino');
 
-    return render(request, 'ggalbas/resultadoDiagnostico.html',data)
-
-def calculoDiagnostico(request):
-
-    pruebaGuia = request.session['prueba_guia']
-    prueba = request.session['prueba']    
-    rut = request.session['rut']
-    
-    # obtengo solo los dos primeros caracteres para determinar cual actividad es.
-    codigo_actividad = prueba[0:2]
-
-    #consulta el objeto alumno
-    obj_alumno = TblAlumnos.objects.get(rut_alumno=rut)
-
-    #consulta los resultados del alumno
-    TblAlumnoRespuestas_set =TblAlumnoRespuestas.objects.filter(rut_alumno=obj_alumno,prueba_guia=pruebaGuia)
-
-    #consulta los ejes y habilidades de las preguntas de la actividad.
-    TblPreguntas_set = TblPreguntas.objects.filter(siglas=codigo_actividad)
-
-    # indice que separa las preguntas de pre-requisito y las de nivel.
-    preguntas_prueba = {'P3': 10, 'P4': 10,'P5': 16, 'P6': 16, 'P7': 16, 'P8': 16}
-   
-    # cantidad de preguntas
-    cant = 0
-
-    # cantidad de respuestas correctas en pre-requisito y nivel.
-    puntaje_pre = 0
-    puntaje_nivel = 0
-
-    punto_prerequisito = 0
-    punto_nivel = 0
-        
-
-    HabilidadPreg= dict()
-
-    EjePreg = dict()
-
-    CantPregHabilidad = {1:0, 2:0, 3:0, 4:0, 5:0} 
-
-    CantPregEje = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0}
-
-    #recorrer las preguntas de la actividad para conocer sus eje y habilidades.
-    for result in TblPreguntas_set:
-        
-        objHabilidades= result.id_habilidad
-        
-        objEje = result.id_eje
-
-        HabilidadPreg[result.npregunta] = int(objHabilidades.id_habilidad)
-
-        EjePreg[result.npregunta] = int(objEje.id_eje)
-        
-        CantPregHabilidad[int(objHabilidades.id_habilidad)] += 1 
-        
-        CantPregEje[int(objEje.id_eje)] += 1 
-            
-    PuntajesEje = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0}
-
-    PuntajesHabilidad = {1:0, 2:0, 3:0, 4:0, 5:0} 
-
-    # recorre las respuestas del alumno.
-    for record in TblAlumnoRespuestas_set:
-
-        cant += 1
-
-        aprobada = 0 if record.aprobada < 1 else record.aprobada
-      
-        if int(record.npregunta) <= int(preguntas_prueba[codigo_actividad]):
-            puntaje_pre += aprobada
-        else:
-            puntaje_nivel += aprobada
-
-        PuntajesEje[int(EjePreg[record.npregunta])] += aprobada
-
-        PuntajesHabilidad[int(HabilidadPreg[record.npregunta])] += aprobada
-        
-    # calcula los porcentaje de pre-requisito y de nivel.   
-    if cant > 0:
-        punto_prerequisito = round((puntaje_pre*100)/int(preguntas_prueba[codigo_actividad]))
-        punto_nivel = round((puntaje_nivel*100)/(cant-int(preguntas_prueba[codigo_actividad]))) if puntaje_nivel > 0 else 0
-
-    punto_prerequisito = 1 if punto_prerequisito == 0 else punto_prerequisito
-    punto_nivel  =  1 if punto_nivel == 0 else punto_nivel       
-
-    h1    = (PuntajesHabilidad[1]*100)/(CantPregHabilidad[1]) if CantPregHabilidad[1] > 0 else ''
-    h2    = (PuntajesHabilidad[2]*100)/(CantPregHabilidad[2]) if CantPregHabilidad[2] > 0 else ''
-    h3    = (PuntajesHabilidad[3]*100)/(CantPregHabilidad[3]) if CantPregHabilidad[3] > 0 else ''
-    eje1  = (PuntajesEje[1]*100)/(CantPregEje[1]) if PuntajesEje[1] > 0 else 0
-    eje2  = (PuntajesEje[3]*100)/(CantPregEje[3]) if PuntajesEje[3] > 0 else 0
-    eje3  = (PuntajesEje[2]*100)/(CantPregEje[2]) if PuntajesEje[2] > 0 else 0
-    eje4  = (PuntajesEje[4]*100)/(CantPregEje[4]) if PuntajesEje[4] > 0 else 0
-    eje5  = (PuntajesEje[5]*100)/(CantPregEje[5]) if PuntajesEje[5] > 0 else 0
-    eje6  = (PuntajesEje[6]*100)/(CantPregEje[6]) if CantPregEje[6] > 0 else 0
-    eje7  = (PuntajesEje[8]*100)/(CantPregEje[8]) if CantPregEje[8] > 0 else 0
-    eje8  = (PuntajesEje[7]*100)/(CantPregEje[7]) if CantPregEje[7] > 0 else 0
-    eje9  = (PuntajesEje[9]*100)/(CantPregEje[9]) if CantPregEje[9] > 0 else 0
-    eje10 = (PuntajesEje[10]*100)/(CantPregEje[10]) if CantPregEje[10] > 0 else 0
-    
-    return punto_prerequisito,punto_nivel,h1, h2,h3, eje1, eje2, eje3, eje4, eje5, eje6, eje7, eje8, eje9, eje10
+    return render(request, 'ggalbas/resultadoDiagnostico.html', data)
 
 def obtenerIp(request):
-    return HttpResponse(socket.gethostbyname(socket.gethostname()))
+    host = socket.gethostname()
+    ip = socket.gethostbyname(host)
+    return HttpResponse(ip)
+
+def unidadesAlumno(request):
+    nombres = request.session['nombres']
+    nivel = request.session['nivel']
+    rbd = request.session['rbd']
+    return render(request, 'ggalbas/unidadesAlumno.html', {'nombres': nombres, 'nivel': nivel, 'rbd': rbd})

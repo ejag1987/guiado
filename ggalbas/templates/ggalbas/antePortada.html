@@ -2,6 +2,10 @@
 {% load static %}
 {% block title %} Entrada Diagnostico {% endblock %}
 
+{% block header %}  panel-celeste py-2 {% endblock %}
+
+{% block bg-imagen %} background-image: url('{% static 'core/images/fondos/bg-diagnostico.png' %} {% endblock %}
+
 {% block barra %}
                 <div class="col-8 col-sm-6 mb-2 mb-sm-0 text-left">
                 <div class="nombre-alumno mb-1 font-weight-bold">¡Bienvenid@! <span class="color-red">{{ nombres }}</span></div>

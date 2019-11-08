@@ -2,6 +2,8 @@
 {% load static %}
 {% block title %} Resultado Diagnostico {% endblock %}
 
+{% block bg-imagen %} background-image: url('{% static 'core/images/fondos/Diag-PInicial-Fondo1.png' %} {% endblock %}
+
 {% block barra %}
     <div class="col-5 col-sm-3 col-lg-2 text-center d-flex align-items-center">
         <button id="vuelveAnteP" type="button" class="btn btn-light rounded-pill box-shadow w-100"><span><img src="{% static 'core/images/objetos/triangle-curved.svg' %}" width="18"></span> Volver</button>
@@ -39,7 +41,7 @@
                                 <div class="col-12">
                                     <div class="row">
                                         <div class="col-12">
-                                            <input type="text" class="form-control" id="final-evaluacion" value="Materia" disabled="">
+                                            <input type="text" class="form-control" id="final-evaluacion" value="" disabled="">
                                         </div>
                                     </div>
                                 </div>
@@ -78,7 +80,7 @@
                         </form>
 
                         <div class="btn-margin-down btn-arrow-right w-100">
-                            <a href="#" class="d-flex">
+                            <a href="{% url 'unidadesAlumno' %}" class="d-flex">
                                 <div class="flecha border border-white mx-auto my-1 mr-md-1 mb-md-1"></div>
                             </a>
                         </div>
