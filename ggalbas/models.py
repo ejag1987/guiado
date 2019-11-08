@@ -170,7 +170,7 @@ class TblAlumnoActividades(models.Model):
 class TblAlumnoDiagnostico(models.Model):
     id_alumno_diagnostico = models.AutoField(primary_key=True)
     rut_alumno = models.ForeignKey('TblAlumnos', models.DO_NOTHING, db_column='rut_alumno', blank=True, null=True)
-    id_contenido_fase_actividad = models.IntegerField(blank=True, null=True)
+    id_actividad = models.ForeignKey(TblActividades, models.DO_NOTHING, db_column='id_actividad', blank=True, null=True)
     fecha_inicio = models.DateTimeField(blank=True, null=True)
     fecha_fin = models.DateTimeField(blank=True, null=True)
     punto_prerequisito = models.IntegerField(blank=True, null=True)
@@ -449,8 +449,10 @@ class TblTipoPregunta(models.Model):
 
 class TblTutores(models.Model):
     rut_tutor = models.CharField(primary_key=True, max_length=20)
-    nombre = models.CharField(max_length=255)
-    apellido = models.CharField(max_length=255)
+    nombres = models.CharField(max_length=50)
+    apellidos = models.CharField(max_length=50)
+    correo = models.CharField(max_length=50)
+    clave = models.CharField(max_length=50)
 
     class Meta:
         managed = False
@@ -459,7 +461,7 @@ class TblTutores(models.Model):
 
 class TblUnidades(models.Model):
     id_unidad = models.AutoField(primary_key=True)
-    nombre_unidad = models.CharField(max_length=255)
+    nombre_unidad = models.CharField(max_length=50)
     id_nivel = models.ForeignKey(TblNiveles, models.DO_NOTHING, db_column='id_nivel', blank=True, null=True)
     orden = models.IntegerField()
 
