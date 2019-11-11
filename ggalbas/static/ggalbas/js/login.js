@@ -2,26 +2,35 @@ $('#entrar').attr("disabled", true);
 var url = jQuery(location).attr('href');
 
  function cargaAnimacion(){
-  $('#loader').html('<img src="/static/ggalbas/images/loader.gif" alt="loader">').fadeOut(1000);
-  return true;
+  $('#loader').html('<img src="/static/ggalbas/images/loader.gif" alt="loader">').fadeIn(1000);
  }
+
+function quitarAnimacion(){
+  $('#loader').html('<img src="/static/ggalbas/images/loader.gif" alt="loader">').fadeOut(1000);
+ }
+
  function mostrarPassword(){
 $('#input-password').removeClass('oculto');
  }
+
  function quitarPassword(){
   $('#input-password').addClass('oculto');
  }
+
  function mostrarCaptcha(){
   $('#captcha').removeClass('oculto');
   $('#captcha').css('display', 'flex');
  }
+
  function desactivarCaptcha(){
   $('#captcha').addClass('oculto');
  }
+
  function validaIngresoRut(){
   $('#entrar').on('click', function(e){
     e.preventDefault();
     e.stopImmediatePropagation();
+    cargaAnimacion();
     $.ajax({
             async: true,
             type: 'POST',
@@ -31,6 +40,7 @@ $('#input-password').removeClass('oculto');
                     rut: $('#rut').val()+-+$('#validador').val() 
             },
             success: function (respuesta){
+                  quitarAnimacion();
                   if(respuesta.status=='datos alumno ok'){
                     if (respuesta.nuevo){
                         $(location).attr('href',"antePortada");
@@ -68,13 +78,12 @@ $('#input-password').removeClass('oculto');
 }
 
 function validaIngresoCompleto(ip){
-console.log(ip);
+
 $('#entrar').click(function(e){
     e.preventDefault();
     e.stopImmediatePropagation();
     var rut= $('#rut').val();
     var validador= $('#validador').val();
-    var validacion = Fn.validaRut(rut+'-'+validador);
 
     if (rut=="" || validador=="" ){
    // $('#errorRut').html('<span>Debe ingresar un Rut válido</span>').fadeIn(1000); 
@@ -92,6 +101,9 @@ $('#entrar').click(function(e){
             console.log('captcha diferente');
           }
           else{
+
+            cargaAnimacion();
+
             $.ajax({
             async: true,
             type: 'POST',
@@ -103,6 +115,7 @@ $('#entrar').click(function(e){
                      ip: ip
             },
             success: function (respuesta){
+              quitarAnimacion();
               $('#errorPass').fadeOut('slow');
               $('#errorCaptcha').fadeOut('slow');
               if(respuesta.status=='datos alumno ok'){
@@ -145,25 +158,16 @@ function validaRutIp(){
       else{
 
         var rutValidado = Fn.validaRut(rutCompleto);
-
-        cargaAnimacion();
-
             if (rutValidado == false){
-
               $('#errorRut').html('<span>Debe ingresar un Rut válido</span>').fadeIn(1000);
-
               quitarPassword();
-
               desactivarCaptcha();
-               
             }
             else {
 
-             cargaAnimacion();
-
              $('#errorRut').fadeOut('slow');
 
-             $.getJSON( "http://jsonip.com?callback=?", function(data) {
+             $.getJSON( "https://api.ipify.org?format=json", function(data) {
                 verificaRutIp(rutCompleto,data.ip)
              })
              .fail(function() {
@@ -181,6 +185,8 @@ function validaRutIp(){
 
 function verificaRutIp(rut,ip){
 
+cargaAnimacion();
+
 $.ajax({
       async: true,
       type: "POST",
@@ -191,36 +197,22 @@ $.ajax({
         'rut': rut
       },
       success: function(respuesta){
-
-        cargaAnimacion();
-
+        quitarAnimacion();
         console.log(respuesta);
-
         $('#entrar').removeAttr("disabled");
 
         if(respuesta.status=='validado'){
-
               quitarPassword();
-
               desactivarCaptcha();
-
               $('#input-password').html('');
-
               validaIngresoRut();
-
         }
         else{
-
               console.log('no validado');
-
               mostrarPassword();
-
               $('#input-password').html(respuesta.formulario);
-
               mostrarCaptcha();
-
               validaIngresoCompleto(ip);
-
         }
       },
       error: function(){
