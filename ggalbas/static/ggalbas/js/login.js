@@ -1,7 +1,8 @@
 $('#entrar').attr("disabled", true);
+
 var url = jQuery(location).attr('href');
 
- function cargaAnimacion(){
+function cargaAnimacion(){
   $('#loader').html('<img src="/static/ggalbas/images/loader.gif" alt="loader">').fadeIn(1000);
  }
 

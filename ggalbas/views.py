@@ -7,7 +7,7 @@ import socket
 from datetime import date
 
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 
 from ggalbas.models import TblAlumnos, TblListas, TblPreguntausuarios, TblSubproducto, TblRegistroipAlumno, TblNiveles, TblInstituciones, TblActividades, TblTipoActividad, TblAlumnoActividades, TblAlumnoRespuestas, TblPreguntas, TblHabilidades, TblEje,TblAlumnoDiagnostico
 from core.models import Preguntas2Basico, Pruebas, PreguntasInstancias
@@ -112,16 +112,17 @@ def verificaRespuesta(request):
 def verificaRutIp(request):
     rut = request.POST['rut']
     ip = request.POST['ip']
+    respuesta = {}
 
     consulta = TblRegistroipAlumno.objects.filter(rut_alumno=rut, ip=ip)
-    respuesta = {}
+
     if consulta:
         respuesta['status'] = 'validado'
-        respuesta['rut'] = rut
     else:
         respuesta['status'] = 'sin datos'
-        respuesta['formulario'] = '<div class="form-row"><div class="form-group col-12"><label for="inputPassword">Password</label><input type="password" class="form-control" id="password" placeholder="••••••••"></div></div>'
+
     responde = json.dumps(respuesta)
+
     return HttpResponse(responde)
 
 
@@ -142,7 +143,7 @@ def ingresoCompleto(request):
         try:
             registro.save()
             respuesta['status'] = 'datos alumno ok'
-            ## Declaracion de las variables de session
+            # Declaracion de las variables de session
             request.session['rut'] = consulta[0].rut_alumno
             request.session['nombres'] = consulta[0].nombre + ' ' + consulta[0].apellido
             listas = TblListas.objects.filter(codigo_lista=consulta[0].codigo_lista)
@@ -153,12 +154,10 @@ def ingresoCompleto(request):
             request.session['nivel'] = niveles[0].nivel + '-' + listas[0].letra
             request.session['rbd'] = rbd[0].nombre_institucion
 
-
             if consulta[0].nuevo == 1:
                 respuesta['nuevo']= True
                 prueba = 'P' + nivel + 'GG' + '01' + year
                 request.session['prueba'] = prueba
-
             else:
                 respuesta['diagnostico'] = 'No'
         except:

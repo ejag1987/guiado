@@ -24,35 +24,43 @@
                         <div class="nuevo-alumno">
                             <form class="col-md-8 offset-md-2 form-login" method="POST">
                                 {% csrf_token %}
-
-              <div class="form-row">
-                <div class="form-group col-9">
-                  <label>Rut</label>
-                  <input type="text" class="form-control input-number" id="rut" placeholder="Ejemplo: 11111111" maxlength="8" autofocus="">
-                </div>
-                <div class="form-group col-1 guion-input text-center align-self-end pb-2">
-                  <span>-</span>
-                </div>
-                <div class="form-group col-2">
-                  <br>
-                  <input type="text" class="form-control" id="validador" placeholder="1" maxlength="1">
-                </div>
-                <div id="loader"></div>
-              </div>
-              <div id="errorRut" class="error"></div>
-              <div id= "input-password"> </div>
-              <div id="errorPass" class="error"></div>
-              <div id="captcha" class="oculto">
-                <div id="img-captcha" class="col-4">{{ captcha }}</div>
-                <input id="texto-captcha" type="text" class="form-control input-number col-4" maxlength="4">
-              </div>
-              <div id="errorCaptcha" class="error"></div>
-              <br>
-              <button id="entrar" type="submit" class="btn btn-primary btn-lg btn-principal btn-block">Entrar</button>
-              <a href="recuperaClave">
-                <button type="button" class="btn btn-link btn-olvidaste btn-block text-center">¿Olvidaste tu Password?</button>
-              </a>
-            </form>
+                            <input type="hidden" name="tipoIngreso" id="tipoIngreso">
+                            <input type="hidden" name="ip" id="ip">
+                              <div class="form-row">
+                                    <div class="form-group col-9">
+                                      <label>Rut</label>
+                                      <input type="text" class="form-control input-number" id="rut" placeholder="Ejemplo: 11111111" maxlength="8" autofocus="">
+                                    </div>
+                                    <div class="form-group col-1 guion-input text-center align-self-end pb-2">
+                                      <span>-</span>
+                                    </div>
+                                    <div class="form-group col-2">
+                                      <br>
+                                      <input type="text" class="form-control" id="validador" placeholder="1" maxlength="1">
+                                    </div>
+                                    <div id="loader" style="display:none">
+                                        <img src="/static/ggalbas/images/loader.gif" alt="loader">
+                                    </div>
+                              </div>
+                              <div id="errorRut" class="error"></div>
+                              <div class="form-row oculto" id="input-password">
+                                  <div class="form-group col-12">
+                                      <label for="password">Password</label>
+                                      <input type="password" class="form-control" id="password" placeholder="••••••••">
+                                  </div>
+                              </div>
+                              <div id="errorPass" class="error"></div>
+                              <div id="captcha" class="oculto">
+                                <div id="img-captcha" class="col-4">{{ captcha }}</div>
+                                <input id="texto-captcha" type="text" class="form-control input-number col-4" maxlength="4">
+                              </div>
+                              <div id="errorCaptcha" class="error"></div>
+                              <br>
+                              <button id="entrar" type="submit" class="btn btn-primary btn-lg btn-principal btn-block">Entrar</button>
+                              <a href="recuperaClave">
+                                <button type="button" class="btn btn-link btn-olvidaste btn-block text-center">¿Olvidaste tu Password?</button>
+                              </a>
+                            </form>
           </div>
         </div>
         <footer>EMAT | BÁSICA GUIADO</footer>
@@ -65,5 +73,5 @@
 
 {% block extrascript %}
     <script src="{% static 'ggalbas/js/DjangoAjax.js' %}"></script>
-    <script src="{% static 'ggalbas/js/login.js' %}"></script>
+    <script src="{% static 'ggalbas/js/login_nuevo.js' %}"></script>
 {% endblock %}
