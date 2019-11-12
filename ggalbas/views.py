@@ -307,6 +307,13 @@ def guardaRespuesta(request):
              if listaRespuestas[x] == respuestaAlumno[x]:
                  instancias+=1
         instancia= int(instancias)/cantidad
+    elif tipoE ==3:
+        respCorrecta = correcta.replace('~', ",")
+        listaRespuestas = respCorrecta.split(sep=',')
+        if listaRespuestas[0] == respuestaAlumno[0]:
+            instancia = 1
+        else:
+            instancia = 0
 
     else:
         listaRespuestas = correcta.split(sep=',')
