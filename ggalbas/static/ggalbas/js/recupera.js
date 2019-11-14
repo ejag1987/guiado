@@ -1,17 +1,68 @@
+$( document ).ready(function() {
+
  $('#recuperar-password').attr("disabled", true);
- var url = jQuery(location).attr('href');
- 
+
+    $('#rut').blur(function(){
+        verificaRut();
+    });
+
+    $('#validador').keyup(function(){
+        verificaRut();
+    });
+
+	$('#recuperar-password').on('click', function(e){
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        var rutCompleto = $('#rut').val()+'-'+$('#validador').val();
+        $('#errorRut').html('').fadeOut('fast');
+        $('#errorRespuesta').html('').fadeOut('fast');
+        $('#box-password-recuperada').fadeOut('fast');
+        $('#forgot-password').html('');
+
+          if ($('#rut').val().trim()=="" || $('#validador').val().trim()==""){
+                $('#errorRespuesta').html('<span>rut o validador vacios</span>').fadeIn('fast');
+          }
+          else  if (Fn.validaRut(rutCompleto) == false){
+             $('#errorRut').html('<span>Debe ingresar un Rut válido</span>').fadeIn('fast');
+         }
+         else if($('#respuesta-secreta').val().trim()==""){
+              $('#errorRespuesta').html('<span>Debe ingresar una respuesta</span>').fadeIn('fast');
+           }
+            else{
+            cargaAnimacion();
+                $.ajax({
+                        async: true,
+                        type: "POST",
+                        url: "recuperaClave/verificaRespuesta",
+                        dataType: 'json',
+                        data: {
+                            rut: rutCompleto,
+                            answer: $('#respuesta-secreta').val()
+                          },
+                        success: function(respuesta){
+                             quitarAnimacion();
+                            if (respuesta.status=='respuesta ok'){
+                                $('#box-password-recuperada').fadeIn('fast');
+                                $('#forgot-password').html('<span>'+respuesta.password+'</span>');
+                            }
+                            else{
+                                $('#box-password-recuperada').fadeOut('fast');
+                                $('#forgot-password').html('');
+                                $('#errorRespuesta').html('<span>Respuesta inválida</span>').fadeIn('fast');
+                            }
+                          },
+
+                });
+            }
+	});
+});
+
  function cargaAnimacion(){
-  $('#loader').html('<img src="../static/images/loader.gif" alt="loader">').fadeOut('slow');
-  return true;
+  $('#loader').fadeIn('fast');
  }
 
- function reset(){
-	$('#recuperar-password').attr("disabled", true);
-    $('#pregunta-secreta').html('');
-    $('#label-respuesta').html('');
-    $('#respuesta').html('');
-    $('#errorRespuesta').html('');
+function quitarAnimacion(){
+  $('#loader').fadeOut('fast');
  }
 
 
@@ -22,10 +73,10 @@
     if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test( rutCompleto ))
       return false;
     var tmp   = rutCompleto.split('-');
-    var digv  = tmp[1]; 
+    var digv  = tmp[1];
     var rut   = tmp[0];
     if ( digv == 'K' ) digv = 'k' ;
-    
+
     return (Fn.dv(rut) == digv );
   },
   dv : function(T){
@@ -36,99 +87,57 @@
   }
 }
 
-consultaRut();
 
-function consultaRut(){
-	  $('#rut').on('blur', function(){
-    var rut = $(this).val();
-    $('#validador').keyup(function(){
-      var validador= $(this).val();
-      var rutCompleto = rut+'-'+validador;
-      if (rut=="" || validador==""){
-        console.log('rut o validador vacios');
+function verificaRut(){
+
+    $('#errorRut').html('').fadeOut('fast');
+    $('#errorRespuesta').html('').fadeOut('fast');
+	$('#div-pregunta').fadeOut('fast');
+    $('#label-pregunta').html('');
+    $('#div-respuesta').fadeOut('fast');
+    $('#respuesta-secreta').val('');
+    $('#box-password-recuperada').fadeOut('fast');
+    $('#forgot-password').html('');
+    $('#recuperar-password').attr("disabled", true);
+
+    var rutCompleto = $('#rut').val().trim()+'-'+$('#validador').val().trim();
+
+      if ($('#rut').val().trim()=="" || $('#validador').val().trim()==""){
+            console.log('rut o validador vacios');
       }
-      else{
-        var rutValidado = Fn.validaRut(rutCompleto);
-            
+      else  if (Fn.validaRut(rutCompleto) == false){
+         $('#errorRut').html('<span>Debe ingresar un Rut válido</span>').fadeIn('fast');
+     }
+      else {
+              cargaAnimacion();
 
-            if (rutValidado == false){
-              cargaAnimacion();
-              $('#errorRut').html('<span>Debe ingresar un Rut válido</span>').fadeIn(1000);
-            }
-            else {
-              cargaAnimacion();
-              $('#errorRut').fadeOut('slow');
                 $.ajax({
                   async: true,
                   type: "POST",
-                  url: url+"/verificaRut",
+                  url: "recuperaClave/verificaRut",
                   dataType: 'json',
                   data: {
                     rut: rutCompleto
                   },
-                  success: function(respuesta){
-                  	if(respuesta.status=='consulta ok'){
+                  success: function(data){
+                    quitarAnimacion();
+                  	if(data.status=='consulta ok'){
                   		$('#recuperar-password').removeAttr("disabled");
-                  		$('#pregunta-secreta').html('<label id="pregunta-secreta" for="alumnonuevo-apoderado" class=" col-form-label">'+respuesta.pregunta+'</label>');
-                  		$('#label-respuesta').html('<label for="respuesta-seguridad" class="col-form-label">Respuesta: </label>');
-                  		$('#respuesta').html('<input type="text" class="form-control input-respuesta">');
-                  		recuperaPass();
+                  		$('#div-pregunta').fadeIn('fast');
+                  		$('#label-pregunta').html(data.pregunta);
+                  		$('#div-respuesta').fadeIn('fast');
+                  		$('#respuesta-secreta').val('');
                   	}
                   	else{
-                  		$('#errorRut').html('<span>Rut no se encuentra registrado</span>').fadeIn(1000);
-                  		reset();
+                  		$('#errorRut').html('<span>Rut no se encuentra registrado</span>').fadeIn('fast');
                   	}
-
                   },
                   error: function(){
-                    console.log(respuesta);
                     console.log('error del sistema');
                   }
                 });
-            } 
-      }
-    });
-  });
+            }
+
 }
 
-function recuperaPass(){
-	$('#recuperar-password').on('click', function(e){
-	e.preventDefault();
-    e.stopImmediatePropagation();
-
-    var rutCompleto = $('#rut').val()+'-'+$('#validador').val();
-
-    if($('.input-respuesta').val()==""){
-    	$('#errorRespuesta').html('<span>Debe ingresar una respuesta</span>').fadeIn(1000);
-    }
-    else{
-    	$('#errorRespuesta').fadeOut('slow');
-    	$.ajax({
-    	        async: true,
-                type: "POST",
-                url: url+"/verificaRespuesta",
-                dataType: 'json',
-                data: {
-                    rut: rutCompleto,
-                    answer: $('.input-respuesta').val()
-                  },
-                success: function(respuesta){
-                  	console.log(respuesta);
-                  	if (respuesta.status=='respuesta ok'){
-                  		$('#errorRespuesta').html('');
-                  		$('#box-password-recuperada').removeClass('d-none');
-                  		$('#forgot-password').html('<span>'+respuesta.password+'</span>');
-                  	}
-                  	else{
-                  		$('#box-password-recuperada').addClass('d-none');
-                  		$('#forgot-password').html('');
-                  		$('#errorRespuesta').html('<span>Respuesta inválida</span>').fadeIn(1000);
-                  	}
-                  },
-
-    	});
-    }
-
-	});
-}
 

@@ -31,7 +31,7 @@
 							{% csrf_token %}
                             <div class="form-row">
                                 <div class="form-group col-9">
-                                    <label for="inputRut">Rut</label>
+                                    <label for="">Rut</label>
                                     <input type="text" class="form-control input-number" id="rut" placeholder="Ejemplo: 11111111" maxlength="8" autofocus="">
                                 </div>
                                 <div class="form-group col-1 guion-input text-center align-self-end pb-2">
@@ -41,26 +41,35 @@
                                     <br>
                                     <input type="text" class="form-control" id="validador" placeholder="1" maxlength="1">
                                 </div>
-                                <div id="loader"></div>
+                                <div id="loader" style="display:none">
+                                    <img src="{% static 'ggalbas/images/loader.gif' %}" alt="loader">
+                                </div>
                             </div>
                             <div id="errorRut" class="error"></div>
-                            <div class="form-row">
-                                <div id="pregunta-secreta" class="form-group col-12"></div>
+
+                            <div class="form-row" id="div-pregunta" style="display: none;">
+                                <div  class="form-group col-12">
+                                    <label id="label-pregunta" class=" col-form-label"> </label>
+                                </div>
                             </div>
-                            <div class="form-row">
-                                <div id="label-respuesta" class="col-sm-3 px-md-0 text-sm-right"></div>
+                            <div class="form-row" id="div-respuesta" style="display: none;">
+                                <div  class="col-sm-3 px-md-0 text-sm-right">
+                                    <label class="col-form-label">Respuesta: </label>
+                                </div>
                                 <div class="col-sm-9">
                                     <div class="row">
-                                        <div id="respuesta" class="col-12"></div>
+                                        <div  class="col-12">
+                                           <input type="text" class="form-control" id="respuesta-secreta">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div id="errorRespuesta" class="error"></div>
                             <br>
                             <button id= "recuperar-password" type="button" class="btn btn-recuperar-password btn-lg btn-green btn-block mb-3">Recuperar contraseña</button>
-                            <div id="box-password-recuperada" class="form-group row card orange d-none">
+                            <div id="box-password-recuperada" class="form-group row card orange" style="display: none;">
                                 <div class="card-body">
-                                    <label for="forgot-password-apoderado">Tu password es:</label>
+                                    <label for="">Tu password es:</label>
                                     <div id ="forgot-password"></div>
                                 </div>
                             </div>
