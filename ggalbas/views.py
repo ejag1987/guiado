@@ -9,7 +9,7 @@ from datetime import date
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from ggalbas.models import TblAlumnos, TblListas, TblPreguntausuarios, TblSubproducto, TblRegistroipAlumno, TblNiveles, TblInstituciones, TblActividades, TblTipoActividad, TblAlumnoActividades, TblAlumnoRespuestas, TblPreguntas, TblHabilidades, TblEje,TblAlumnoDiagnostico
+from ggalbas.models import TblAlumnos, TblListas, TblPreguntausuarios, TblSubproducto, TblRegistroipAlumno, TblNiveles, TblInstituciones, TblActividades, TblTipoActividad, TblAlumnoActividades, TblAlumnoRespuestas, TblPreguntas, TblHabilidades, TblEje, TblAlumnoDiagnostico, TblContenidoUnidad, TblUnidades
 from core.models import Preguntas2Basico, Pruebas, PreguntasInstancias
 
 
@@ -352,65 +352,62 @@ def resultadoDiagnostico(request):
     punto_nivel = 0
     HabilidadPreg = dict()
     EjePreg = dict()
+    codigo_actividad = prueba[0:2]
     CantPregHabilidad = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
     CantPregEje = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0}
-    codigo_actividad = prueba[0:2]
     PuntajesEje = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0}
     PuntajesHabilidad = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
     # indice que separa las preguntas de pre-requisito y las de nivel.
     preguntas_prueba = {'P3': 10, 'P4': 10, 'P5': 16, 'P6': 16, 'P7': 16, 'P8': 16}
 
-    TblPreguntas_set = TblPreguntas.objects.filter(siglas=codigo_actividad)
+    preguntas = TblPreguntas.objects.filter(siglas=codigo_actividad)
 
-    for result in TblPreguntas_set:
+    for pregunta in preguntas:
 
-        objHabilidades = result.id_habilidad
-        objEje = result.id_eje
-        HabilidadPreg[result.npregunta] = int(objHabilidades.id_habilidad)
-        EjePreg[result.npregunta] = int(objEje.id_eje)
-        CantPregHabilidad[int(objHabilidades.id_habilidad)] += 1
-        CantPregEje[int(objEje.id_eje)] += 1
+        HabilidadPreg[pregunta.npregunta] = int(pregunta.id_habilidad.id_habilidad)
+        EjePreg[pregunta.npregunta] = int(pregunta.id_eje.id_eje)
+        CantPregHabilidad[int(pregunta.id_habilidad.id_habilidad)] += 1
+        CantPregEje[int(pregunta.id_eje.id_eje)] += 1
 
-    TblAlumnoRespuestas_set = TblAlumnoRespuestas.objects.filter(rut_alumno=TblAlumnos.objects.get(rut_alumno=rut), prueba_guia=pruebaGuia)
+    respuestas = TblAlumnoRespuestas.objects.filter(rut_alumno=TblAlumnos.objects.get(rut_alumno=rut), prueba_guia=pruebaGuia)
 
     # recorre las respuestas del alumno.
-    for record in TblAlumnoRespuestas_set:
+    for respuesta in respuestas:
 
         cant += 1
 
-        aprobada = 0 if record.aprobada < 1 else record.aprobada
+        aprobada = 0 if respuesta.aprobada < 1 else respuesta.aprobada
 
-        if int(record.npregunta) <= int(preguntas_prueba[codigo_actividad]):
+        if int(respuesta.npregunta) <= int(preguntas_prueba[codigo_actividad]):
             puntaje_pre += aprobada
         else:
             puntaje_nivel += aprobada
 
-        PuntajesEje[int(EjePreg[record.npregunta])] += aprobada
+        PuntajesEje[int(EjePreg[respuesta.npregunta])] += aprobada
 
-        PuntajesHabilidad[int(HabilidadPreg[record.npregunta])] += aprobada
+        PuntajesHabilidad[int(HabilidadPreg[respuesta.npregunta])] += aprobada
 
     # calcula los porcentaje de pre-requisito y de nivel.
     if cant > 0:
-        punto_prerequisito = round((puntaje_pre * 100) / int(preguntas_prueba[codigo_actividad]))
-        punto_nivel = round((puntaje_nivel * 100) / (cant - int(preguntas_prueba[codigo_actividad]))) if puntaje_nivel > 0 else 0
+        punto_prerequisito = round(puntaje_pre * 100 / int(preguntas_prueba[codigo_actividad]))
+        punto_nivel = round(puntaje_nivel * 100 / (cant - int(preguntas_prueba[codigo_actividad]))) if puntaje_nivel > 0 else 0
 
     punto_prerequisito = 1 if punto_prerequisito == 0 else punto_prerequisito
-
     punto_nivel = 1 if punto_nivel == 0 else punto_nivel
 
-    h1 = (PuntajesHabilidad[1] * 100) / (CantPregHabilidad[1]) if CantPregHabilidad[1] > 0 else ''
-    h2 = (PuntajesHabilidad[2] * 100) / (CantPregHabilidad[2]) if CantPregHabilidad[2] > 0 else ''
-    h3 = (PuntajesHabilidad[3] * 100) / (CantPregHabilidad[3]) if CantPregHabilidad[3] > 0 else ''
-    eje1 = (PuntajesEje[1] * 100) / (CantPregEje[1]) if PuntajesEje[1] > 0 else 0
-    eje2 = (PuntajesEje[3] * 100) / (CantPregEje[3]) if PuntajesEje[3] > 0 else 0
-    eje3 = (PuntajesEje[2] * 100) / (CantPregEje[2]) if PuntajesEje[2] > 0 else 0
-    eje4 = (PuntajesEje[4] * 100) / (CantPregEje[4]) if PuntajesEje[4] > 0 else 0
-    eje5 = (PuntajesEje[5] * 100) / (CantPregEje[5]) if PuntajesEje[5] > 0 else 0
-    eje6 = (PuntajesEje[6] * 100) / (CantPregEje[6]) if CantPregEje[6] > 0 else 0
-    eje7 = (PuntajesEje[8] * 100) / (CantPregEje[8]) if CantPregEje[8] > 0 else 0
-    eje8 = (PuntajesEje[7] * 100) / (CantPregEje[7]) if CantPregEje[7] > 0 else 0
-    eje9 = (PuntajesEje[9] * 100) / (CantPregEje[9]) if CantPregEje[9] > 0 else 0
-    eje10 = (PuntajesEje[10] * 100) / (CantPregEje[10]) if CantPregEje[10] > 0 else 0
+    h1 = round(PuntajesHabilidad[1] * 100 / CantPregHabilidad[1]) if CantPregHabilidad[1] > 0 else ''
+    h2 = round(PuntajesHabilidad[2] * 100 / CantPregHabilidad[2]) if CantPregHabilidad[2] > 0 else ''
+    h3 = round(PuntajesHabilidad[3] * 100 / CantPregHabilidad[3]) if CantPregHabilidad[3] > 0 else ''
+    eje1 = round(PuntajesEje[1] * 100 / CantPregEje[1]) if PuntajesEje[1] > 0 else 0
+    eje2 = round(PuntajesEje[3] * 100 / CantPregEje[3]) if PuntajesEje[3] > 0 else 0
+    eje3 = round(PuntajesEje[2] * 100 / CantPregEje[2]) if PuntajesEje[2] > 0 else 0
+    eje4 = round(PuntajesEje[4] * 100 / CantPregEje[4]) if PuntajesEje[4] > 0 else 0
+    eje5 = round(PuntajesEje[5] * 100 / CantPregEje[5]) if PuntajesEje[5] > 0 else 0
+    eje6 = round(PuntajesEje[6] * 100 / CantPregEje[6]) if CantPregEje[6] > 0 else 0
+    eje7 = round(PuntajesEje[8] * 100 / CantPregEje[8]) if CantPregEje[8] > 0 else 0
+    eje8 = round(PuntajesEje[7] * 100 / CantPregEje[7]) if CantPregEje[7] > 0 else 0
+    eje9 = round(PuntajesEje[9] * 100 / CantPregEje[9]) if CantPregEje[9] > 0 else 0
+    eje10 = round(PuntajesEje[10] * 100 / CantPregEje[10]) if CantPregEje[10] > 0 else 0
 
     # obtener la fecha de inicio de la actividad.
     # actualizar la fecha de fin de la actividad.
@@ -419,13 +416,13 @@ def resultadoDiagnostico(request):
 
     fechaActual = now.strftime("%Y-%m-%d %H:%M:%S")
 
-    registro = TblAlumnoDiagnostico(rut_alumno=TblAlumnos.objects.get(rut_alumno=rut), 
+    registro = TblAlumnoDiagnostico(rut_alumno=TblAlumnos.objects.get(rut_alumno=rut),
                                     id_actividad=TblActividades.objects.get(prueba_guia=pruebaGuia),
                                     fecha_inicio=fechaActual,
                                     fecha_fin=fechaActual,
                                     punto_prerequisito=punto_prerequisito,
                                     punto_nivel=punto_nivel,
-                                    h1=h1, 
+                                    h1=h1,
                                     h2=h2,
                                     h3=h3,
                                     eje1=eje1,
