@@ -96,7 +96,7 @@ function recuperaPass(){
 	e.preventDefault();
     e.stopImmediatePropagation();
 
-    var rutCompleto = $('#rut').val()+-+$('#validador').val();
+    var rutCompleto = $('#rut').val()+'-'+$('#validador').val();
 
     if($('.input-respuesta').val()==""){
     	$('#errorRespuesta').html('<span>Debe ingresar una respuesta</span>').fadeIn(1000);
