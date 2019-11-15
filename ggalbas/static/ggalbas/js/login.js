@@ -125,7 +125,7 @@ function  ingresoSoloRut(){
             url: "ingresoSoloRut",
             dataType: 'json',
             data: {
-                    rut: $('#rut').val()+-+$('#validador').val()
+                    rut: rutCompleto
             },
             success: function (respuesta){
                   quitarAnimacion();
