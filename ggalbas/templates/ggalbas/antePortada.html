@@ -8,7 +8,7 @@
 
 {% block barra %}
                 <div class="col-8 col-sm-6 mb-2 mb-sm-0 text-left">
-                <div class="nombre-alumno mb-1 font-weight-bold">¡Bienvenid@! <span class="color-red">{{ nombres }}</span></div>
+                <div class="nombre-alumno mb-1 font-weight-bold">¡Bienvenid@! <span >{{ nombres }}</span></div>
                 <div class="row">
                     <div class="col-12 unidad">{{nivel}}</div>
                     <div class="col-12 colegio">{{rbd}}</div>
@@ -32,8 +32,8 @@
 
                 <div class="col-12 col-sm-5 col-md-6 col-lg-5 personajes-diagnostico">
                     <div class="d-none d-sm-flex align-items-end h-100">
-                        <img src="{% static 'core/images/personajes/basica3-5_a.png' %}" class="img-fluid d-none d-xl-block">
-                        <img src="{% static 'core/images/personajes/basica3-5_b.png' %}" class="img-fluid d-xl-none">
+                        <img src="{% static 'core/images/personajes/' %}{{personajes_a}}" class="img-fluid d-none d-xl-block">
+                        <img src="{% static 'core/images/personajes/' %}{{personajes_b}}" class="img-fluid d-xl-none">
                     </div>
                 </div>
 {% endblock %}
