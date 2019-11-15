@@ -1401,3 +1401,12 @@ form input::-ms-input-placeholder {
 	max-width: 100%!important;
 }
 
+.fill-input{
+position: relative;
+color: black;
+font-size: calc(.9vw + .8vh + .85vmin);
+border-style: none;
+text-align: center;
+background: transparent !important;
+outline: none !important;
+}
