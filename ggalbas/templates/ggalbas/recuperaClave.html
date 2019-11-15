@@ -31,7 +31,7 @@
 							{% csrf_token %}
                             <div class="form-row">
                                 <div class="form-group col-9">
-                                    <label for="">Rut</label>
+                                    <label for="rut">Rut</label>
                                     <input type="text" class="form-control input-number" id="rut" placeholder="Ejemplo: 11111111" maxlength="8" autofocus="">
                                 </div>
                                 <div class="form-group col-1 guion-input text-center align-self-end pb-2">
@@ -53,10 +53,10 @@
                                 </div>
                             </div>
                             <div class="form-row" id="div-respuesta" style="display: none;">
-                                <div  class="col-sm-3 px-md-0 text-sm-right">
+                                <div  class="col-sm-4 px-md-0 text-sm-lef">
                                     <label class="col-form-label">Respuesta: </label>
                                 </div>
-                                <div class="col-sm-9">
+                                <div class="col-sm-8">
                                     <div class="row">
                                         <div  class="col-12">
                                            <input type="text" class="form-control" id="respuesta-secreta">
