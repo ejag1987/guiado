@@ -79,4 +79,8 @@ function guardaRespuesta(){
             });
 }
 
-
+function playrecord(){
+    document.getElementById('player').pause();
+    document.getElementById('player').currentTime = 0;
+    document.getElementById('player').play();
+}

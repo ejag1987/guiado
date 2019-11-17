@@ -54,13 +54,14 @@
         <div class="page-number text-black text-shadow position-absolute d-flex justify-content-center align-items-center pr-1 pb-1 pr-md-2 pb-md-2">
             <span class="bg-white d-flex justify-content-center align-items-center align-middle rounded-bottom font-weight-bold box-shadow">{{ nejercicio }}</span>
         </div>
-        <div class="btn-sonido position-absolute">
+        {% if ver_audio %}
+        <div class="btn-sonido position-absolute" onclick="playrecord()">
             <a href="#" class="d-flex">
                 <div class="sonido"></div>
             </a>
         </div>
+        {% endif %}
         <div class="btn-arrow-right position-absolute">
-
             <a href="#" class="d-flex"><div id="flecha" class="flecha" onclick="proximoEjercicio()">{% csrf_token %}</div>
             </a>
         </div>
@@ -85,7 +86,12 @@
                 </div>
 </div>
 
-
+   {% if ver_audio %}
+         <audio  autoplay id="player">
+            <source src="{% static 'core/audios/' %}{{audio_ejercicio}}" type="audio/ogg">
+            Your browser does not support the audio element.
+        </audio>
+    {% endif %}
 
 {% endblock %}
 {% block extrascript %}

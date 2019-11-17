@@ -257,6 +257,9 @@ def visorActividades(request):
     prueba = request.session['prueba']
     actividad = TblActividades.objects.filter(prueba_guia=pruebaGuia)
     rutAlumno = request.session['rut']
+    hoy = date.today()
+    year = format(hoy.year)
+    id_nivel = request.session['id_nivel']
 
     if actividad:
         descripcion = actividad[0].descripcion_actividades
@@ -279,21 +282,22 @@ def visorActividades(request):
 
     if respuestas:
         npregunta = int(respuestas.last().npregunta)
-        img = base64.b64encode(preguntas[npregunta].imagen).decode()
-        posiciones = str(preguntas[npregunta].posiciones_botones)
-        pos_boton = posiciones.replace('!', "")
-        lista_pos = pos_boton.split(',')
-        posicion_boton = [lista_pos[i:i + 4] for i in range(0, len(lista_pos), 4)]
-        npreg = preguntas[npregunta].npregunta
-        tipoEjercicio = preguntas[npregunta].tipo_ejercicio
     else:
-        img = base64.b64encode(preguntas[0].imagen).decode()
-        posiciones = str(preguntas[0].posiciones_botones)
-        pos_boton = posiciones.replace('!', "")
-        lista_pos = pos_boton.split(',')
-        posicion_boton = [lista_pos[i:i + 4] for i in range(0, len(lista_pos), 4)]
-        npreg = preguntas[0].npregunta
-        tipoEjercicio = preguntas[0].tipo_ejercicio
+        npregunta = 0
+
+    img = base64.b64encode(preguntas[npregunta].imagen).decode()
+    posiciones = str(preguntas[npregunta].posiciones_botones)
+    pos_boton = posiciones.replace('!', "")
+    lista_pos = pos_boton.split(',')
+    posicion_boton = [lista_pos[i:i + 4] for i in range(0, len(lista_pos), 4)]
+    npreg = preguntas[npregunta].npregunta
+    tipoEjercicio = preguntas[npregunta].tipo_ejercicio
+    audio_ejercicio = 'P' + str(id_nivel) + 'GG01' + str(year) + '_e' + str(npreg)+'_int.ogg'
+
+    if 3 <= int(id_nivel) <= 4:
+        ver_audio = True
+    elif 5 <= int(id_nivel) <= 8:
+        ver_audio = False
 
     data = {
         'title': 'imagen-ejercicio',
@@ -303,6 +307,8 @@ def visorActividades(request):
         'botones': posicion_boton,
         'nejercicio': npreg,
         'tipoE': tipoEjercicio,
+        'audio_ejercicio': audio_ejercicio,
+        'ver_audio': ver_audio,
     }
 
     return render(request, 'ggalbas/visorActividades.html', data)
@@ -516,6 +522,7 @@ def unidadesAlumno(request):
     }
 
     return render(request, 'ggalbas/unidadesAlumno.html', data)
+
 
 def contenidosAlumno(request):
     data = {
