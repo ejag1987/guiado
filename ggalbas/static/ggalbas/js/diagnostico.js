@@ -13,6 +13,9 @@ $( document ).ready(function() {
         $(location).attr('href',url);
     });
 
+    $('#numeroEjercicio').tooltip();
+
+
 });
 
 function proximoEjercicio(){

@@ -10,7 +10,7 @@
     </div>
     <div class="col-7 col-sm-9 col-lg-10 bg-verde">
         <div class="barra-estado {% if  request.path == '/ggalbas/visorActividades' %} bg-white-75 {% else %} bg-white-50 {% endif %}  rounded p-1 my-2 text-left">
-            <span class="px-2 align-middle d-inline-block"> Estás en: <strong>{{prueba}}</strong></span>
+            <span class="px-2 align-middle d-inline-block"> Est&aacute;s en: <strong>{{prueba}}</strong></span>
         </div>
     </div>
 {% endblock %}
@@ -51,7 +51,7 @@
         </div>
 
         <img src="data:{{tipo}};base64,{{ img }}" width="100%" class="img-fluid img-modulo-800">
-        <div class="page-number text-black text-shadow position-absolute d-flex justify-content-center align-items-center pr-1 pb-1 pr-md-2 pb-md-2">
+        <div id="numeroEjercicio" class="page-number text-black text-shadow position-absolute d-flex justify-content-center align-items-center pr-1 pb-1 pr-md-2 pb-md-2" title="{{ nejercicio }} / {{total_ejercicios }}" >
             <span class="bg-white d-flex justify-content-center align-items-center align-middle rounded-bottom font-weight-bold box-shadow">{{ nejercicio }}</span>
         </div>
         {% if ver_audio %}
@@ -67,23 +67,25 @@
         </div>
 
     </div>
-                    <div class="w-100 text-center">
-                    <div class="d-inline-block d-xl-none container-botonera container-botonera-border text-shadow mx-auto pt-0 mw-100">
-                        <div class="buttons d-inline-flex p-1 p-md-2 rounded-lg img-modulo-800 overflow-auto">
-                            <button type="button" class="btn flex-fill mx-md-1 text-shadow">1</button>
-                            <button type="button" class="btn flex-fill mx-md-1 text-shadow">2</button>
-                            <button type="button" class="btn flex-fill mx-md-1 text-shadow">3</button>
-                            <button type="button" class="btn flex-fill mx-md-1 text-shadow">4</button>
-                            <button type="button" class="btn flex-fill mx-md-1 text-shadow">5</button>
-                            <button type="button" class="btn flex-fill mx-md-1 text-shadow">6</button>
-                            <button type="button" class="btn flex-fill mx-md-1 text-shadow">7</button>
-                            <button type="button" class="btn flex-fill mx-md-1 text-shadow">8</button>
-                            <button type="button" class="btn flex-fill mx-md-1 text-shadow">9</button>
-                            <button type="button" class="btn flex-fill mx-md-1 text-shadow">0</button>
-                            <button type="button" class="btn borrar flex-fill mx-md-1 text-shadow">Borrar</button>
+              {% if tipoE == 1 %}
+                        <div class="w-100 text-center">
+                            <div class="d-inline-block d-xl-none container-botonera container-botonera-border text-shadow mx-auto pt-0 mw-100">
+                                <div class="buttons d-inline-flex p-1 p-md-2 rounded-lg img-modulo-800 overflow-auto">
+                                    <button type="button" class="btn flex-fill mx-md-1 text-shadow tecladoNumerico">1</button>
+                                    <button type="button" class="btn flex-fill mx-md-1 text-shadow tecladoNumerico">2</button>
+                                    <button type="button" class="btn flex-fill mx-md-1 text-shadow tecladoNumerico">3</button>
+                                    <button type="button" class="btn flex-fill mx-md-1 text-shadow tecladoNumerico">4</button>
+                                    <button type="button" class="btn flex-fill mx-md-1 text-shadow tecladoNumerico">5</button>
+                                    <button type="button" class="btn flex-fill mx-md-1 text-shadow tecladoNumerico">6</button>
+                                    <button type="button" class="btn flex-fill mx-md-1 text-shadow tecladoNumerico">7</button>
+                                    <button type="button" class="btn flex-fill mx-md-1 text-shadow tecladoNumerico">8</button>
+                                    <button type="button" class="btn flex-fill mx-md-1 text-shadow tecladoNumerico">9</button>
+                                    <button type="button" class="btn flex-fill mx-md-1 text-shadow tecladoNumerico">0</button>
+                                    <button type="button" class="btn borrar flex-fill mx-md-1 text-shadow">Borrar</button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+             {% endif %}
 </div>
 
    {% if ver_audio %}

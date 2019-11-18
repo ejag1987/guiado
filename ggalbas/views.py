@@ -278,6 +278,7 @@ def visorActividades(request):
             descripcion = 'no hay actividad'
 
     preguntas = Preguntas2Basico.objects.using('e_test').filter(idprueba=pruebaGuia)
+    total_ejercicios = preguntas.count()
     respuestas = TblAlumnoRespuestas.objects.filter(rut_alumno=rutAlumno, prueba_guia=pruebaGuia)
 
     if respuestas:
@@ -309,6 +310,7 @@ def visorActividades(request):
         'tipoE': tipoEjercicio,
         'audio_ejercicio': audio_ejercicio,
         'ver_audio': ver_audio,
+        'total_ejercicios': total_ejercicios
     }
 
     return render(request, 'ggalbas/visorActividades.html', data)
